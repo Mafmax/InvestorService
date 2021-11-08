@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  mssql-server: 
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "mafmaxInvestor2021"
+      MSSQL_PID: Express  
+  mafmax.investorservice.api:
+    image: ${DOCKER_REGISTRY-}mafmaxinvestorserviceapi
+    build:
+      context: .
+      dockerfile: Mafmax.InvestorService.Api/Dockerfile
+    ports:
+      - "8090:80"
+

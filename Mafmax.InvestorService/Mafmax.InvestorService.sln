@@ -5,7 +5,17 @@ VisualStudioVersion = 16.0.31313.79
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Model", "Mafmax.InvestorService.Model\Mafmax.InvestorService.Model.csproj", "{1E37D6FF-A978-4212-9491-648863898B77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mafmax.InvestorService.Services", "Mafmax.InvestorService.Services\Mafmax.InvestorService.Services.csproj", "{E682259C-AAC6-4C38-ADB6-14E7DF4BECB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Services", "Mafmax.InvestorService.Services\Mafmax.InvestorService.Services.csproj", "{E682259C-AAC6-4C38-ADB6-14E7DF4BECB5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Api", "Mafmax.InvestorService.Api\Mafmax.InvestorService.Api.csproj", "{6DD0F6EB-434D-47F0-8AD4-23CD8335B265}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Model.Migrations", "Mafmax.InvestorService.Model.Migrations\Mafmax.InvestorService.Model.Migrations.csproj", "{8E7321FF-26E6-4AD1-A88D-0FA722E46E91}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DAA9F818-0447-455E-AE9C-5A62C6A0A677}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mafmax.InvestorService.Services.Tests", "..\Mafmax.InvestorService.Services.Tests\Mafmax.InvestorService.Services.Tests.csproj", "{76A3F9CA-5519-4B24-A2C1-01BD6F989789}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mafmax.InvestorService.Services.MockData", "..\Mafmax.InvestorService.Services.MockData\Mafmax.InvestorService.Services.MockData.csproj", "{02805198-B308-4647-9B6F-D176D20574A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +31,26 @@ Global
 		{E682259C-AAC6-4C38-ADB6-14E7DF4BECB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E682259C-AAC6-4C38-ADB6-14E7DF4BECB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E682259C-AAC6-4C38-ADB6-14E7DF4BECB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DD0F6EB-434D-47F0-8AD4-23CD8335B265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DD0F6EB-434D-47F0-8AD4-23CD8335B265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DD0F6EB-434D-47F0-8AD4-23CD8335B265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DD0F6EB-434D-47F0-8AD4-23CD8335B265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E7321FF-26E6-4AD1-A88D-0FA722E46E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E7321FF-26E6-4AD1-A88D-0FA722E46E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E7321FF-26E6-4AD1-A88D-0FA722E46E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E7321FF-26E6-4AD1-A88D-0FA722E46E91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02805198-B308-4647-9B6F-D176D20574A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02805198-B308-4647-9B6F-D176D20574A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02805198-B308-4647-9B6F-D176D20574A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02805198-B308-4647-9B6F-D176D20574A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
