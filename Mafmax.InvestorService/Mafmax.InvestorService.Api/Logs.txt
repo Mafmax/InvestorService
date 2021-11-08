@@ -1,0 +1,35 @@
+2021-11-07 20:37:51.419 +05:00 [INF] HTTP GET /swagger/swagger-ui-bundle.js.map responded 404 in 43.6580 ms
+2021-11-07 20:37:51.663 +05:00 [INF] HTTP GET /swagger/swagger-ui-standalone-preset.js.map responded 404 in 0.6482 ms
+2021-11-07 18:48:30.526 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 18:48:30.570 +00:00 [WRN] No XML encryptor configured. Key {1f51118d-0b5b-43f3-95c6-f794789abeaa} may be persisted to storage in unencrypted form.
+2021-11-07 18:51:53.457 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 18:51:53.508 +00:00 [WRN] No XML encryptor configured. Key {8f96e0a4-9ac3-442d-97a7-6cc0cf30dbcd} may be persisted to storage in unencrypted form.
+2021-11-07 18:54:49.879 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 18:58:52.772 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 18:58:52.815 +00:00 [WRN] No XML encryptor configured. Key {e3d11a5d-6fbf-4ad7-9c98-935a40eb3d5f} may be persisted to storage in unencrypted form.
+2021-11-07 19:01:05.141 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:02:41.808 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:04:50.580 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:06:30.579 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:09:07.736 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:10:56.785 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-08 00:13:43.065 +05:00 [INF] HTTP GET /swagger/swagger-ui-bundle.js.map responded 404 in 40.6706 ms
+2021-11-08 00:13:43.180 +05:00 [INF] HTTP GET /swagger/swagger-ui-standalone-preset.js.map responded 404 in 0.3171 ms
+2021-11-07 19:14:11.898 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:18:25.791 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:18:25.843 +00:00 [WRN] No XML encryptor configured. Key {f6cc8878-bc5f-4228-9170-dcb6174093a7} may be persisted to storage in unencrypted form.
+2021-11-07 19:22:11.336 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:22:11.386 +00:00 [WRN] No XML encryptor configured. Key {5a7e0983-5453-4602-bf0f-9bf3d0f85e76} may be persisted to storage in unencrypted form.
+2021-11-07 19:22:29.163 +00:00 [INF] HTTP GET / responded 404 in 36.3063 ms
+2021-11-07 19:22:57.853 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:24:03.882 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:25:21.885 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:25:44.838 +00:00 [INF] HTTP GET / responded 404 in 37.2846 ms
+2021-11-07 19:26:17.976 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:26:47.961 +00:00 [INF] HTTP GET /api/login/logout responded 405 in 70.6484 ms
+2021-11-07 19:27:01.530 +00:00 [INF] HTTP GET /api/login/error responded 401 in 25.0414 ms
+2021-11-07 19:27:01.622 +00:00 [INF] HTTP GET /favicon.ico responded 404 in 1.5566 ms
+2021-11-07 19:30:52.249 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-07 19:30:52.291 +00:00 [WRN] No XML encryptor configured. Key {7e378161-cec4-420f-bd27-4bbf63c05fd2} may be persisted to storage in unencrypted form.
+2021-11-08 03:00:02.513 +00:00 [WRN] Storing keys in a directory '/root/.aspnet/DataProtection-Keys' that may not be persisted outside of the container. Protected data will be unavailable when container is destroyed.
+2021-11-08 03:00:02.569 +00:00 [WRN] No XML encryptor configured. Key {d997a2c3-dd25-4efb-b332-fe3fa7cc55e6} may be persisted to storage in unencrypted form.
