@@ -5,28 +5,27 @@ using Mafmax.InvestorService.Services.Tests.Queries.Base;
 using Xunit;
 using static Mafmax.InvestorService.Services.MockData.Context.MockProvider;
 
-namespace Mafmax.InvestorService.Services.Tests.Queries
+namespace Mafmax.InvestorService.Services.Tests.Queries;
+
+public class IssuersQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<IssuersQueriesHandler>
 {
-    public class IssuersQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<IssuersQueriesHandler>
+    protected override IssuersQueriesHandler GetHandler()
     {
-        protected override IssuersQueriesHandler GetHandler()
-        {
-            var db = GetContext("Readonly");
-            var mapper = GetMapper(typeof(IssuersQueriesHandler).Assembly);
-            return new(db, mapper);
-        }
+        var db = GetContext("Readonly");
+        var mapper = GetMapper(typeof(IssuersQueriesHandler).Assembly);
+        return new(db, mapper);
+    }
 
-        [Fact]
-        public async Task GetIssuers_ShouldReturnsResult()
-        {
-            //Arrange
-            GetIssuersQuery query = new();
+    [Fact]
+    public async Task GetIssuers_ShouldReturnsResult()
+    {
+        //Arrange
+        GetIssuersQuery query = new();
 
-            //Act
-            var issuers = await Handler.AskAsync(query);
+        //Act
+        var issuers = await Handler.AskAsync(query);
 
-            //Assert
-            Assert.NotEmpty(issuers);
-        }
+        //Assert
+        Assert.NotEmpty(issuers);
     }
 }

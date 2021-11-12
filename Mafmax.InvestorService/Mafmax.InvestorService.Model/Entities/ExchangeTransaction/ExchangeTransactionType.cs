@@ -1,20 +1,18 @@
-﻿namespace Mafmax.InvestorService.Model.Entities.ExchangeTransaction
+﻿namespace Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
+
+/// <summary>
+/// Transaction order type (buy or sell)
+/// </summary>
+public enum ExchangeTransactionType
 {
-    
+
     /// <summary>
-    /// Transaction order type (buy or sell)
+    /// Order to assets selling
     /// </summary>
-    public enum ExchangeTransactionType
-    {
+    Sell,
 
-        /// <summary>
-        /// Order to assets selling
-        /// </summary>
-        Sell,
-
-        /// <summary>
-        /// Order to assets buying
-        /// </summary>
-        Buy
-    }
+    /// <summary>
+    /// Order to assets buying
+    /// </summary>
+    Buy
 }

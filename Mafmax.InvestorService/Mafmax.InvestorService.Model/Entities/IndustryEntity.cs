@@ -1,24 +1,24 @@
 ﻿using System.ComponentModel.DataAnnotations;
+// ReSharper disable PropertyCanBeMadeInitOnly.Global
+// ReSharper disable UnusedMember.Global
 
-namespace Mafmax.InvestorService.Model.Entities
+namespace Mafmax.InvestorService.Model.Entities;
+
+/// <summary>
+/// Company industry
+/// </summary>
+public class IndustryEntity
 {
 
     /// <summary>
-    /// Company industry
+    /// Industry identifier
     /// </summary>
-    public class IndustryEntity
-    {
+    [Key]
+    public int Id { get; set; }
 
-        /// <summary>
-        /// Industry identifier
-        /// </summary>
-        [Key]
-        public int Id { get; set; } 
-
-        /// <summary>
-        /// Industry name
-        /// </summary>
-        [Required]
-        public string Name { get; set; } = null!;
-    }
+    /// <summary>
+    /// Industry name
+    /// </summary>
+    [Required]
+    public string Name { get; set; } = string.Empty;
 }

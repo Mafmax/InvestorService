@@ -1,15 +1,14 @@
-﻿namespace Mafmax.InvestorService.Model.Entities.Assets
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Mafmax.InvestorService.Model.Entities.Assets;
+
+/// <summary>
+/// Bond entity
+/// </summary>
+public class BondEntity : AssetEntity
 {
 
     /// <summary>
-    /// Bond entity
+    /// Type of bond.
     /// </summary>
-    public class BondEntity : AssetEntity
-    {
-
-        /// <summary>
-        /// Type of bond.
-        /// </summary>
-        public BondType Type { get; set; }
-    }
+    public BondType Type { get; set; }
 }

@@ -1,22 +1,20 @@
 ﻿using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 
-namespace Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands
+namespace Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
+
+/// <summary>
+/// DTO to receive user data from request for <see cref="DeletePortfolioCommand"/>
+/// </summary>
+public record DeletePortfolioCommandRequestDto(int PortfolioId)
 {
 
     /// <summary>
-    /// DTO to receive user data from request for <see cref="DeletePortfolioCommand"/>
+    /// Creates command (<inheritdoc cref="DeletePortfolioCommand"/>) from DTO
     /// </summary>
-    public record DeletePortfolioCommandRequestDto(int PortfolioId)
+    /// <param name="investorId">Investor id</param>
+    /// <returns>Instance of <see cref="DeletePortfolioCommand"/></returns>
+    public DeletePortfolioCommand GetCommand(int investorId)
     {
-
-        /// <summary>
-        /// Creates command (<inheritdoc cref="DeletePortfolioCommand"/>) from DTO
-        /// </summary>
-        /// <param name="investorId">Investor id</param>
-        /// <returns>Instance of <see cref="DeletePortfolioCommand"/></returns>
-        public DeletePortfolioCommand GetCommand(int investorId)
-        {
-            return new(investorId, PortfolioId);
-        }
+        return new(investorId, PortfolioId);
     }
 }

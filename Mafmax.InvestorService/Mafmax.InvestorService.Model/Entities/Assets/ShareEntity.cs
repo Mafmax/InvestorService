@@ -1,15 +1,14 @@
-﻿namespace Mafmax.InvestorService.Model.Entities.Assets
+﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+namespace Mafmax.InvestorService.Model.Entities.Assets;
+
+/// <summary>
+/// Share (stock) entity
+/// </summary>
+public class ShareEntity : AssetEntity
 {
 
     /// <summary>
-    /// Share (stock) entity
+    /// Flag of preferred or common share
     /// </summary>
-    public class ShareEntity : AssetEntity
-    {
-
-        /// <summary>
-        /// Flag of preferred or common share
-        /// </summary>
-        public bool IsPreferred { get; set; }
-    }
+    public bool IsPreferred { get; set; }
 }

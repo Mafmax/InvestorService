@@ -1,25 +1,23 @@
-﻿namespace Mafmax.InvestorService.Model.Entities.Assets
+﻿namespace Mafmax.InvestorService.Model.Entities.Assets;
+
+/// <summary>
+/// Type of bond
+/// </summary>
+public enum BondType
 {
 
     /// <summary>
-    /// Type of bond
+    /// Issued by a national government. Other name is sovereign.
     /// </summary>
-    public enum BondType
-    {
+    Government,
 
-        /// <summary>
-        /// Issued by a national government. Other name is sovereign.
-        /// </summary>
-        Government,
+    /// <summary>
+    /// Issued by a state, municipality or country.
+    /// </summary>
+    Municipal,
 
-        /// <summary>
-        /// Issued by a state, municipality or country.
-        /// </summary>
-        Municipal,
-
-        /// <summary>
-        /// Issued by a firm
-        /// </summary>
-        Corporate
-    }
+    /// <summary>
+    /// Issued by a firm
+    /// </summary>
+    Corporate
 }

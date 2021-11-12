@@ -6,50 +6,48 @@ using Mafmax.InvestorService.Services.Tests.Commands.Base;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace Mafmax.InvestorService.Services.Tests.Commands
+namespace Mafmax.InvestorService.Services.Tests.Commands;
+
+public class LoginCommandsHandlerTests : InvestorServiceCommandsHandlerTestsBase<LoginCommandsHandler>
 {
-    public class LoginCommandsHandlerTests : InvestorServiceCommandsHandlerTestsBase<LoginCommandsHandler>
+    protected override LoginCommandsHandler GetHandler(Guid token) =>
+        new(GetDb(token), Mapper);
+
+    [Theory]
+    [InlineData("Investor1")]
+    [InlineData("Investor2")]
+    [InlineData("Investor3")]
+    public async Task RegisterUser_ShouldThrows_IfUserWithSameLoginExists(string login)
     {
-        protected override LoginCommandsHandler GetHandler(Guid token) =>
-            new(GetDb(token), Mapper);
+        //Arrange
+        RegisterInvestorCommand command = new(login, "asdASD123");
 
+        //Act
 
-        [Theory]
-        [InlineData("Investor1")]
-        [InlineData("Investor2")]
-        [InlineData("Investor3")]
-        public async Task RegisterUser_ShouldThrows_IfUserWithSameLoginExists(string login)
-        {
-            //Arrange
-            RegisterInvestorCommand command = new(login, "asdASD123");
+        //Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Handler.ExecuteAsync(command));
+    }
 
-            //Act
+    [Fact]
+    public async Task RegisterUser_ShouldAddUser()
+    {
+        //Arrange
+        var token = GetDbToken();
+        int startCount;
+        int actualDifference;
 
-            //Assert
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await Handler.ExecuteAsync(command));
-        }
+        await using (var db = GetDb(token))
+            startCount =await db.Investors.CountAsync();
 
-        [Fact]
-        public async Task RegisterUser_ShouldAddUser()
-        {
-            //Arrange
-            var token = GetDbToken();
-            int startCount;
-            int actualDifference;
+        RegisterInvestorCommand command = new("Investor4", "asdASD123");
 
-            await using (var db = GetDb(token))
-                startCount =await db.Investors.CountAsync();
+        //Act
+        await GetHandler(token).ExecuteAsync(command);
 
-            RegisterInvestorCommand command = new("Investor4", "asdASD123");
+        await using (var db = GetDb(token))
+            actualDifference = await db.Investors.CountAsync() - startCount;
 
-            //Act
-            await GetHandler(token).ExecuteAsync(command);
-
-            await using (var db = GetDb(token))
-                actualDifference = await db.Investors.CountAsync() - startCount;
-
-            //Assert
-            Assert.Equal(expected: 1, actualDifference);
-        }
+        //Assert
+        Assert.Equal(expected: 1, actualDifference);
     }
 }

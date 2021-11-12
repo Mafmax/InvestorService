@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
 using Mafmax.InvestorService.Model.Entities.Users;
@@ -8,30 +7,28 @@ using Mafmax.InvestorService.Services.Services.Queries.Investors;
 using Microsoft.EntityFrameworkCore;
 using static Mafmax.InvestorService.Services.Exceptions.Helpers.ThrowsHelper;
 
-namespace Mafmax.InvestorService.Services.Services.Queries.Handlers
+namespace Mafmax.InvestorService.Services.Services.Queries.Handlers;
+
+/// <summary>
+/// Handle queries associated with investor
+/// </summary>
+public class InvestorsQueriesHandler : ServiceBase<InvestorDbContext>,
+    IQueryHandler<GetInvestorIdByLogin, int>
 {
+    /// <inheritdoc />
+    public InvestorsQueriesHandler(InvestorDbContext db, IMapper mapper) : base(db, mapper) { }
 
     /// <summary>
-    /// Handle queries associated with investor
+    /// Get investor id by login
     /// </summary>
-    public class InvestorsQueriesHandler : ServiceBase<InvestorDbContext>,
-        IQueryHandler<GetInvestorIdByLogin, int>
+    /// <returns>Investor id</returns>
+    public async Task<int> AskAsync(GetInvestorIdByLogin query)
     {
-        /// <inheritdoc />
-        public InvestorsQueriesHandler(InvestorDbContext db, IMapper mapper) : base(db, mapper) { }
+        var investor = await Db.Investors
+            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login));
 
-        /// <summary>
-        /// Get investor id by login
-        /// </summary>
-        /// <returns>Investor id</returns>
-        public async Task<int> AskAsync(GetInvestorIdByLogin query)
-        {
-            var investor = await Db.Investors
-                .FirstOrDefaultAsync(x => x.Login.Equals(query.Login));
+        if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.Login);
 
-            if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.Login);
-
-            return investor!.Id;
-        }
+        return investor!.Id;
     }
 }
