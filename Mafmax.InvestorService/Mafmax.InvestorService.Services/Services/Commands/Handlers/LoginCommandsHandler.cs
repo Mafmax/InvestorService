@@ -26,15 +26,8 @@ public class LoginCommandsHandler : ServiceBase<InvestorDbContext>,
     /// <returns>Investor id</returns>
     public async Task<int> ExecuteAsync(RegisterInvestorCommand command)
     {
-        var investor = new InvestorEntity()
-        {
-            Login = command.Login,
-            PasswordHash =SHA256.HashData(Encoding.Default.GetBytes(command.Password))
-        };
-            
-        if (await Db.Investors.FirstOrDefaultAsync(x => x.Login.Equals(command.Login)) is not null)
-            throw new InvalidOperationException("User with same login already exists");
-            
+        var investor = Mapper.Map<InvestorEntity>(command);
+
         await Db.Investors.AddAsync(investor);
 
         await Db.SaveChangesAsync();

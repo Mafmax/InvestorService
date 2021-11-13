@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
 using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.Assets;
+using Mafmax.InvestorService.Model.Extensions;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
@@ -37,15 +37,7 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
         .Include(x => x.Circulation)
         .Include(x => x.Issuer).ThenInclude(x => x.Country)
         .Include(x => x.Issuer).ThenInclude(x => x.Industry);
-
-    private IQueryable<AssetEntity> Find(string searchString)
-    {
-        Expression<Func<AssetEntity, bool>> searchPredicateExpression = x =>
-            x.Name.Contains(searchString) || x.Ticker.Contains(searchString) || x.Isin.Contains(searchString);
-
-        return Db.Assets.Where(searchPredicateExpression).Include(x => x.Issuer);
-    }
-
+    
     /// <inheritdoc />
     public AssetsQueriesHandler(InvestorDbContext db, IMapper mapper) : base(db, mapper) { }
 
@@ -57,7 +49,9 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     public async Task<ShortAssetDto[]> AskAsync(FindAssetsQuery query)
     {
         CheckSearchString(query);
-        return await Find(query.SearchString)
+        return await Db.Assets
+            .Include(x => x.Issuer)
+            .Where(AssetEntity.Specs.Search(query.SearchString))
             .Select(x => Mapper.Map<ShortAssetDto>(x))
             .ToArrayAsync();
     }
@@ -70,8 +64,9 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     public async Task<ShortAssetDto[]> AskAsync(FindAssetsWithClassQuery query)
     {
         CheckSearchString(query);
-        return await Find(query.SearchString)
-            .Where(x => x.Class.Equals(query.AssetsClass, StringComparison.OrdinalIgnoreCase))
+        return await Db.Assets
+            .Include(x => x.Issuer)
+            .Where(AssetEntity.Specs.Search(query.SearchString, query.AssetsClass))
             .Select(x => Mapper.Map<ShortAssetDto>(x))
             .ToArrayAsync();
     }
@@ -84,7 +79,7 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     public async Task<AssetDto?> AskAsync(GetAssetByIsinQuery query)
     {
         var asset = await FullAssetWithIncludes
-            .FirstOrDefaultAsync(x => x.Isin == query.Isin);
+            .FirstOrDefaultAsync(x => x.Isin.Equals(query.Isin));
 
         if (asset is null) ThrowEntityNotFound<AssetEntity>(query.Isin);
 
@@ -98,16 +93,15 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// <exception cref="EntityNotFoundException"/>
     public async Task<ShortAssetDto[]> AskAsync(GetIssuerAssetsQuery query)
     {
-        var issuer = await Db.Issuers.FindAsync(query.IssuerId);
+        var issuer = await Db.Issuers.ByIdAsync(query.IssuerId);
 
         if (issuer is null) ThrowEntityNotFound<IssuerEntity>(query.IssuerId);
 
         return await Db.Assets
             .Include(x => x.Stock)
             .Include(x => x.Issuer)
-            .Where(x => x.Issuer.Id == query.IssuerId)
+            .Where(AssetEntity.Specs.ByIssuerValidOnly(query.IssuerId))
             .OrderBy(x => x.Circulation.Start)
-            .Where(x => x.Circulation.End.HasValue == false)
             .Select(x => Mapper.Map<ShortAssetDto>(x))
             .ToArrayAsync();
 
@@ -121,7 +115,7 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     public async Task<AssetDto?> AskAsync(GetAssetByIdQuery query)
     {
         var asset = await FullAssetWithIncludes
-            .FirstOrDefaultAsync(x => x.Id.Equals(query.Id));
+            .ByIdAsync(query.Id);
 
         if (asset is null) ThrowEntityNotFound<AssetEntity>(query.Id);
 

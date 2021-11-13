@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
+using System.Text;
+using System.Threading.Tasks;
+using LinqSpecs.Core;
+using Mafmax.InvestorService.Model.Entities.Assets;
+
+namespace Mafmax.InvestorService.Model.Specifications.Assets;
+
+public class ByIssuerSpecification : Specification<AssetEntity>
+{
+    private readonly int _issuerId;
+
+    /// <inheritdoc />
+    public ByIssuerSpecification(int issuerId)
+    {
+        _issuerId = issuerId;
+    }
+
+    /// <inheritdoc />
+    public override Expression<Func<AssetEntity, bool>> ToExpression() =>
+        x => x.Issuer.Id.Equals(_issuerId);
+}

@@ -13,21 +13,6 @@ public class LoginCommandsHandlerTests : InvestorServiceCommandsHandlerTestsBase
     protected override LoginCommandsHandler GetHandler(Guid token) =>
         new(GetDb(token), Mapper);
 
-    [Theory]
-    [InlineData("Investor1")]
-    [InlineData("Investor2")]
-    [InlineData("Investor3")]
-    public async Task RegisterUser_ShouldThrows_IfUserWithSameLoginExists(string login)
-    {
-        //Arrange
-        RegisterInvestorCommand command = new(login, "asdASD123");
-
-        //Act
-
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Handler.ExecuteAsync(command));
-    }
-
     [Fact]
     public async Task RegisterUser_ShouldAddUser()
     {

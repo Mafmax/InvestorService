@@ -1,8 +1,13 @@
-﻿using AutoMapper;
+﻿using System.Security.Cryptography;
+using System.Text;
+using AutoMapper;
 using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.Assets;
 using Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
+using Mafmax.InvestorService.Model.Entities.Users;
 using Mafmax.InvestorService.Services.DTOs;
+using Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
+using Mafmax.InvestorService.Services.Services.Commands.Login;
 using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 
 namespace Mafmax.InvestorService.Services.Profiles;
@@ -42,5 +47,13 @@ public class MappingProfile : Profile
         CreateMap<InvestmentPortfolioEntity, PortfolioDetailedInfoDto>();
 
         CreateMap<CreatePortfolioCommand, InvestmentPortfolioEntity>();
+
+        CreateMap<AddExchangeTransactionCommand, ExchangeTransactionEntity>()
+            .ForMember(dest => dest.Type,
+                opt => opt.MapFrom(src => src.OrderToBuy ? ExchangeTransactionType.Buy : ExchangeTransactionType.Sell));
+
+        CreateMap<RegisterInvestorCommand, InvestorEntity>()
+            .ForMember(dest => dest.PasswordHash,
+                opt => opt.MapFrom(src => SHA256.HashData(Encoding.Default.GetBytes(src.Password))));
     }
 }

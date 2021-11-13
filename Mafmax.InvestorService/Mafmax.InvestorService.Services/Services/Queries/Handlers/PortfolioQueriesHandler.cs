@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -7,6 +6,7 @@ using Mafmax.InvestorService.Model.Context;
 using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
 using Mafmax.InvestorService.Model.Entities.Users;
+using Mafmax.InvestorService.Model.Extensions;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
@@ -39,11 +39,11 @@ public class PortfolioQueriesHandler : ServiceBase<InvestorDbContext>,
     {
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
-            .FirstOrDefaultAsync(x => x.Id.Equals(query.InvestorId));
+            .ByIdAsync(query.InvestorId);
 
         if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.InvestorId);
 
-        return investor!.Portfolios
+        return investor.Portfolios
             .Select(x => Mapper.Map<PortfolioShortInfoDto>(x))
             .ToArray();
     }
@@ -56,36 +56,38 @@ public class PortfolioQueriesHandler : ServiceBase<InvestorDbContext>,
     /// <exception cref="EntityNotFoundException"/>
     public async Task<PortfolioDetailedInfoDto> AskAsync(GetDetailedPortfolioQuery query)
     {
+        var (investorId, portfolioId) = query;
+
         var investor = await Db.Investors
             .Include(x => x.Portfolios).ThenInclude(x => x.Transactions).ThenInclude(x => x.Asset).ThenInclude(x => x.Stock)
             .Include(x => x.Portfolios).ThenInclude(x => x.Transactions).ThenInclude(x => x.Asset).ThenInclude(x => x.Issuer)
-            .FirstOrDefaultAsync(x => x.Id.Equals(query.InvestorId));
+            .ByIdAsync(investorId);
 
-        if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.InvestorId);
+        if (investor is null) ThrowEntityNotFound<InvestorEntity>(investorId);
 
-        var portfolio = investor?.Portfolios
-            .FirstOrDefault(x => x.Id.Equals(query.PortfolioId));
+        var portfolio = investor.Portfolios
+            .ById(portfolioId);
 
-        if (portfolio is null) ThrowEntityNotFound<InvestmentPortfolioEntity>(query.InvestorId);
+        if (portfolio is null) ThrowEntityNotFound<InvestmentPortfolioEntity>(investorId);
 
-        return FillDetailedPortfolioInfo(portfolio!);
+        return FillDetailedPortfolioInfo(portfolio);
     }
 
     private PortfolioDetailedInfoDto FillDetailedPortfolioInfo(InvestmentPortfolioEntity portfolio)
     {
         var aggregationFunc = AggregationFunc;
 
-        var aggregate = portfolio.Transactions
-            .Aggregate((new(), 0), aggregationFunc);
+        var (parts, totalPrice) = portfolio.Transactions
+            .Aggregate(seed: (new(), 0), aggregationFunc);
 
-        var distribution = aggregate.Item1
-            .Select(x => (x.Key, x.Value / aggregate.Item2 * 100));
+        var distribution = parts
+            .Select(x => (x.Key, x.Value / totalPrice * 100));
 
         return Mapper.Map<PortfolioDetailedInfoDto>(portfolio)
             with
         { AssetsDistribution = distribution.ToArray() };
 
-        static (Dictionary<string, decimal>, decimal) AggregationFunc((Dictionary<string, decimal> Parts, decimal Total) accumulate, ExchangeTransactionEntity x)
+        static DistributionAggregate AggregationFunc((Dictionary<string, decimal> Parts, decimal Total) accumulate, ExchangeTransactionEntity x)
         {
             var sum = x.LotsCount * x.OneLotPrice;
 

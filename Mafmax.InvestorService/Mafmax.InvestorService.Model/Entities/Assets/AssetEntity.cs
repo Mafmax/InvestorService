@@ -1,5 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Reflection.Metadata;
+using System.Security.Cryptography.X509Certificates;
+using LinqSpecs.Core;
+using Mafmax.InvestorService.Model.Interfaces;
+using Mafmax.InvestorService.Model.Specifications.Assets;
+
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -9,8 +16,27 @@ namespace Mafmax.InvestorService.Model.Entities.Assets;
 /// Base type for assets
 /// </summary>
 [Table("Assets")]
-public abstract class AssetEntity
+public abstract class AssetEntity : IHasId<int>
 {
+
+    /// <summary>
+    /// Specifications for AssetEntity and derived
+    /// </summary>
+    public static class Specs
+    {
+        public static Specification<AssetEntity> Search(string searchString, StringComparison searchType = StringComparison.OrdinalIgnoreCase) =>
+            new SearchByIsinSpecification(searchString, searchType)
+            || new SearchByNameSpecification(searchString, searchType)
+            || new SearchByTickerSpecification(searchString, searchType);
+
+        public static Specification<AssetEntity> Search(string searchString, string className, StringComparison searchType = StringComparison.OrdinalIgnoreCase) =>
+            Search(searchString, searchType)
+            && new InClassSpecification(className, searchType);
+
+        public static Specification<AssetEntity> ByIssuerValidOnly(int issuerId) =>
+            new ByIssuerSpecification(issuerId)
+            && new IsValidSpecification();
+    }
 
     /// <summary>
     /// Unique key for asset

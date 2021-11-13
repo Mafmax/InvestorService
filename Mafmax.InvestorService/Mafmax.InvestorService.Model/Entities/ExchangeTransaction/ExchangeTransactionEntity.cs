@@ -1,6 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Mafmax.InvestorService.Model.Entities.Assets;
+using Mafmax.InvestorService.Model.Interfaces;
+
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
@@ -9,13 +11,13 @@ namespace Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
 /// <summary>
 /// Transaction entity
 /// </summary>
-public class ExchangeTransactionEntity
+public class ExchangeTransactionEntity: IHasId<int>
 {
     /// <summary>
     /// Identifier
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    public int Id { get; protected set; }
 
     /// <summary>
     /// One lot of asset price

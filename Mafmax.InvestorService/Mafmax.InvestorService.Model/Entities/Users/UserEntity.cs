@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Mafmax.InvestorService.Model.Interfaces;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
@@ -10,7 +11,7 @@ namespace Mafmax.InvestorService.Model.Entities.Users;
 /// User entity
 /// </summary>
 [Index(nameof(Login), IsUnique = true)]
-public class UserEntity
+public class UserEntity : IHasId<int>
 {
 
     /// <summary>

@@ -29,6 +29,6 @@ public class InvestorsQueriesHandler : ServiceBase<InvestorDbContext>,
 
         if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.Login);
 
-        return investor!.Id;
+        return investor.Id;
     }
 }

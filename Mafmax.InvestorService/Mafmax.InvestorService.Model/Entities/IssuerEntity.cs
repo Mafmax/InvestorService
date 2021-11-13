@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Mafmax.InvestorService.Model.Interfaces;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 
@@ -7,7 +9,7 @@ namespace Mafmax.InvestorService.Model.Entities;
 /// <summary>
 /// Issuer entity
 /// </summary>
-public class IssuerEntity
+public class IssuerEntity : IHasId<int>
 {
 
     /// <summary>

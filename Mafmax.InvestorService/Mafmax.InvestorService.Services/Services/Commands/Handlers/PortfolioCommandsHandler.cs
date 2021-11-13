@@ -1,19 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
 using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.Users;
+using Mafmax.InvestorService.Model.Extensions;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
 using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 using Microsoft.EntityFrameworkCore;
 using static Mafmax.InvestorService.Services.Exceptions.Helpers.ThrowsHelper;
-using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace Mafmax.InvestorService.Services.Services.Commands.Handlers;
 
@@ -38,7 +37,7 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
     {
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
-            .FirstOrDefaultAsync(x => x.Id.Equals(command.InvestorId));
+            .ByIdAsync(command.InvestorId);
 
         Validate(investor);
 
@@ -54,9 +53,10 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
         }
 
         await Db.SaveChangesAsync();
+
         return Mapper.Map<PortfolioDetailedInfoDto>(newPortfolio);
 
-        void Validate(InvestorEntity? i)
+        void Validate([NotNull] InvestorEntity? i)
         {
             if (string.IsNullOrEmpty(command.Name))
                 throw new InvalidOperationException("Name expected");
@@ -80,25 +80,26 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
     {
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
-            .FirstOrDefaultAsync(x => x.Id.Equals(command.InvestorId));
+            .ByIdAsync(command.InvestorId);
 
         var portfolio = investor?.Portfolios
-            .FirstOrDefault(x => x.Id.Equals(command.PortfolioId));
+            .ById(command.PortfolioId);
 
         Validate(investor, portfolio);
 
-        Db.InvestmentPortfolios.Remove(portfolio!);
+        Db.InvestmentPortfolios.Remove(portfolio);
 
         return await Db.SaveChangesAsync();
 
-        void Validate(InvestorEntity? i, InvestmentPortfolioEntity? ip)
+        void Validate([NotNull] InvestorEntity? i,
+            [NotNull] InvestmentPortfolioEntity? ip)
         {
             if (i is null) ThrowEntityNotFound<InvestorEntity>(command.InvestorId);
-               
+
             if (ip is null)
                 ThrowIncludedEntityNotFound<InvestorEntity, InvestmentPortfolioEntity>(command.InvestorId, command.PortfolioId);
 
-            if (i!.Portfolios.Count.Equals(1))
+            if (i.Portfolios.Count.Equals(1))
                 throw new InvalidOperationException("Cannot delete the last portfolio");
         }
     }
@@ -112,31 +113,32 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
     {
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
-            .FirstOrDefaultAsync(x => x.Id.Equals(command.InvestorId));
+            .ByIdAsync(command.InvestorId);
 
-        var portfolio = await Db.InvestmentPortfolios.FindAsync(command.PortfolioId);
+        var portfolio = await Db.InvestmentPortfolios.ByIdAsync(command.PortfolioId);
 
         Validate(investor, portfolio);
 
         if (command.NewName is not null)
-            portfolio!.Name = command.NewName;
+            portfolio.Name = command.NewName;
 
         if (command.NewTargetDescription is not null)
-            portfolio!.TargetDescription = command.NewTargetDescription;
+            portfolio.TargetDescription = command.NewTargetDescription;
 
-        if (!Validator.TryValidateObject(portfolio, new ValidationContext(portfolio), new List<ValidationResult>(), true)) 
+        if (!Validator.TryValidateObject(portfolio, new(portfolio), null, true))
             throw new InvalidOperationException("Model is wrong");
 
         await Db.SaveChangesAsync();
-        
+
         return Mapper.Map<PortfolioDetailedInfoDto>(portfolio);
 
-        void Validate(InvestorEntity? i, InvestmentPortfolioEntity? ip)
+        void Validate([NotNull] InvestorEntity? i, 
+            [NotNull] InvestmentPortfolioEntity? ip)
         {
             if (i is null)
                 ThrowEntityNotFound<InvestorEntity>(command.InvestorId);
 
-            if (ip is null || !i!.Portfolios.Contains(ip))
+            if (ip is null || !i.Portfolios.Contains(ip))
                 ThrowIncludedEntityNotFound<InvestorEntity, InvestmentPortfolioEntity>(command.InvestorId, command.PortfolioId);
         }
     }

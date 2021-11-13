@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
+using Mafmax.InvestorService.Model.Interfaces;
+
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 
@@ -9,7 +11,7 @@ namespace Mafmax.InvestorService.Model.Entities;
 /// <summary>
 /// Portfolio with transactions
 /// </summary>
-public class InvestmentPortfolioEntity
+public class InvestmentPortfolioEntity : IHasId<int>
 {
 
     /// <summary>
