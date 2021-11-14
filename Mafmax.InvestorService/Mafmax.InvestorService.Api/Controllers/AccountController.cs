@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.Services.Commands.Login;
@@ -32,12 +33,12 @@ public class AccountController : InvestorServiceControllerBase
     /// <produce code="400">If user with same login already exists</produce>
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [HttpPost("register")]
-    public async Task<ActionResult<int>> Register([FromQuery] RegisterInvestorCommand command)
+    public async Task<ActionResult<int>> Register([FromQuery] RegisterInvestorCommand command, CancellationToken token)
     {
         CheckLoginExistsQuery query = new(command.Login);
 
-        if (!await Mediator.Send(query))
-            return await Mediator.Send(command);
+        if (!await Mediator.Send(query, token))
+            return await Mediator.Send(command, token);
 
         return BadRequest($"User with login = \"{command.Login}\" already exists");
     }
@@ -51,9 +52,9 @@ public class AccountController : InvestorServiceControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromQuery] CheckCredentialsQuery query)
+    public async Task<IActionResult> Login([FromQuery] CheckCredentialsQuery query, CancellationToken token)
     {
-        if (!await Mediator.Send(query))
+        if (!await Mediator.Send(query, token))
             return Unauthorized("Invalid login or password");
 
         await Authenticate(query.Login);
@@ -65,7 +66,7 @@ public class AccountController : InvestorServiceControllerBase
     /// Shows unauthorized error
     /// </summary>
     [HttpGet("error")]
-    public IActionResult LoginErrorPage() => 
+    public IActionResult LoginErrorPage() =>
         Unauthorized("Not authorized");
 
     private async Task Authenticate(string login)
@@ -89,6 +90,6 @@ public class AccountController : InvestorServiceControllerBase
     /// <returns></returns>
     [Authorize]
     [HttpPost("logout")]
-    public async Task Logout() => 
+    public async Task Logout() =>
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 }

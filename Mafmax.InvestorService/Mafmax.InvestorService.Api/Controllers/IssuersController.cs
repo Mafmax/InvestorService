@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
@@ -30,8 +31,8 @@ public class IssuersController : InvestorServiceControllerBase
     /// <responce code="200">Returns list of issuer companies</responce>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IssuerDto[]>> Get([FromQuery] GetIssuersQuery query) => 
-        await Mediator.Send(query);
+    public async Task<ActionResult<IssuerDto[]>> Get([FromQuery] GetIssuersQuery query, CancellationToken token) => 
+        await Mediator.Send(query, token);
 
     /// <summary>
     /// Gets all assets of issuer-company
@@ -42,11 +43,11 @@ public class IssuersController : InvestorServiceControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("assets/{issuerId}")]
-    public async Task<ActionResult<ShortAssetDto[]>> GetAssets([FromQuery] GetIssuerAssetsQuery query)
+    public async Task<ActionResult<ShortAssetDto[]>> GetAssets([FromQuery] GetIssuerAssetsQuery query, CancellationToken token)
     {
         try
         {
-            return await Mediator.Send(query);
+            return await Mediator.Send(query, token);
         }
         catch (EntityNotFoundException ex)
         {

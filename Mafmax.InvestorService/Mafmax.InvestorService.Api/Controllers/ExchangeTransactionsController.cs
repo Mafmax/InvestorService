@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
@@ -39,7 +40,7 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
     [Authorize]
     [HttpPost("add")]
     public async Task<ActionResult<ExchangeTransactionDto>> AddTransactionIntoPortfolio(
-        [FromQuery] AddExchangeTransactionCommandRequestDto commandDto)
+        [FromQuery] AddExchangeTransactionCommandRequestDto commandDto, CancellationToken token)
     {
         Response.StatusCode = StatusCodes.Status201Created;
 
@@ -47,7 +48,7 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
         {
             var id = await GetCurrentInvestorIdAsync();
 
-            return await Mediator.Send(commandDto.GetCommand(id));
+            return await Mediator.Send(commandDto.GetCommand(id), token);
         }
         catch (EntityNotFoundException ex)
         {
@@ -76,12 +77,12 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
     [Authorize]
     [HttpDelete("remove")]
     public async Task<IActionResult> RemoveTransactionFromPortfolio(
-        [FromQuery] RemoveExchangeTransactionCommandRequestDto command)
+        [FromQuery] RemoveExchangeTransactionCommandRequestDto command, CancellationToken token)
     {
         try
         {
             var id = await GetCurrentInvestorIdAsync();
-            await Mediator.Send(command.GetCommand(id));
+            await Mediator.Send(command.GetCommand(id), token);
             return Ok();
         }
         catch (EntityNotFoundException ex)

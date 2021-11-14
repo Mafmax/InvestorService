@@ -24,13 +24,13 @@ public static class QueryableExtensions
     /// <param name="token">Token for cancel operation</param>
     /// <param name="idExprMsg">Sets by compiler</param>
     /// <returns></returns>
-    /// <exception cref="ArgumentException"></exception>
-    public async static Task<TValue?> ByIdAsync<TValue, TKey>(this IQueryable<TValue> query, TKey id,CancellationToken token=default, [CallerArgumentExpression("id")] string idExprMsg = null!)
+    /// <exception cref="ArgumentNullException"></exception>
+    public async static Task<TValue?> ByIdAsync<TValue, TKey>(this IQueryable<TValue> query, TKey id, CancellationToken token = default, [CallerArgumentExpression("id")] string idExprMsg = null!)
         where TValue : IHasId<TKey>
         where TKey : IEquatable<TKey>
     {
         if (id is null) throw new ArgumentNullException(nameof(id), $"Expression was: <{idExprMsg}>");
 
-        return await query.FirstOrDefaultAsync(x => id.Equals(x.Id),token);
+        return await query.FirstOrDefaultAsync(x => id.Equals(x.Id), token);
     }
 }

@@ -12,7 +12,6 @@ public abstract class InvestorServiceQueriesHandlerTestsBase<THandler>
     // ReSharper disable once UnusedMember.Global
     protected abstract THandler GetHandler();
 
-
     private readonly IMediator _mediator;
 
     protected async Task<TResult> AskAsync<TResult>(IRequest<TResult> query) =>
