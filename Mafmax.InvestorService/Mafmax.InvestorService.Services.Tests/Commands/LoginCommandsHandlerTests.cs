@@ -27,7 +27,7 @@ public class LoginCommandsHandlerTests : InvestorServiceCommandsHandlerTestsBase
         RegisterInvestorCommand command = new("Investor4", "asdASD123");
 
         //Act
-        await GetHandler(token).ExecuteAsync(command);
+        await GetHandler(token).Handle(command,default);
 
         await using (var db = GetDb(token))
             actualDifference = await db.Investors.CountAsync() - startCount;

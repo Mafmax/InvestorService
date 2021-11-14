@@ -11,7 +11,7 @@ public class IssuersQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase
 {
     protected override IssuersQueriesHandler GetHandler()
     {
-        var db = GetContext("Readonly");
+        var db = GetContext();
         var mapper = GetMapper(typeof(IssuersQueriesHandler).Assembly);
         return new(db, mapper);
     }
@@ -23,7 +23,7 @@ public class IssuersQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase
         GetIssuersQuery query = new();
 
         //Act
-        var issuers = await Handler.AskAsync(query);
+        var issuers = await AskAsync(query);
 
         //Assert
         Assert.NotEmpty(issuers);

@@ -1,5 +1,5 @@
 ﻿using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 
 namespace Mafmax.InvestorService.Services.Services.Queries.Assets;
 
@@ -7,4 +7,4 @@ namespace Mafmax.InvestorService.Services.Services.Queries.Assets;
 /// Query to find assets
 /// </summary>
 public record FindAssetsQuery(string SearchString, int MinimalSearchStringLength) 
-    : IQuery<ShortAssetDto[]>;
+    : IRequest<ShortAssetDto[]>;

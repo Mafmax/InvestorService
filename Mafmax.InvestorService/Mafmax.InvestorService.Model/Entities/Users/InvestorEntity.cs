@@ -12,5 +12,5 @@ public class InvestorEntity : UserEntity
     /// <summary>
     /// Collection of investment portfolios of investor
     /// </summary>
-    public ICollection<InvestmentPortfolioEntity> Portfolios { get; set; } = new List<InvestmentPortfolioEntity>();
+    public List<InvestmentPortfolioEntity> Portfolios { get; set; } = new();
 }

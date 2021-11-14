@@ -1,10 +1,9 @@
 ﻿using System.Security.Claims;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
 using Mafmax.InvestorService.Services.Services.Commands.Login;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Login;
+using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -22,7 +21,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class AccountController : InvestorServiceControllerBase
 {
     /// <inheritdoc />
-    public AccountController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher, ILogger<AccountController> logger) : base(queryDispatcher, commandDispatcher, logger)
+    public AccountController(IMediator mediator, ILogger<AccountController> logger) : base(mediator, logger)
     {
     }
 
@@ -37,8 +36,8 @@ public class AccountController : InvestorServiceControllerBase
     {
         CheckLoginExistsQuery query = new(command.Login);
 
-        if (!await QueryDispatcher.AskAsync(query))
-            return await CommandDispatcher.ExecuteAsync(command);
+        if (!await Mediator.Send(query))
+            return await Mediator.Send(command);
 
         return BadRequest($"User with login = \"{command.Login}\" already exists");
     }
@@ -54,7 +53,7 @@ public class AccountController : InvestorServiceControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromQuery] CheckCredentialsQuery query)
     {
-        if (!await QueryDispatcher.AskAsync(query))
+        if (!await Mediator.Send(query))
             return Unauthorized("Invalid login or password");
 
         await Authenticate(query.Login);
@@ -66,10 +65,8 @@ public class AccountController : InvestorServiceControllerBase
     /// Shows unauthorized error
     /// </summary>
     [HttpGet("error")]
-    public IActionResult LoginErrorPage()
-    {
-        return Unauthorized("Not authorized");
-    }
+    public IActionResult LoginErrorPage() => 
+        Unauthorized("Not authorized");
 
     private async Task Authenticate(string login)
     {
@@ -92,9 +89,6 @@ public class AccountController : InvestorServiceControllerBase
     /// <returns></returns>
     [Authorize]
     [HttpPost("logout")]
-    public async Task Logout()
-    {
+    public async Task Logout() => 
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-    }
-
 }

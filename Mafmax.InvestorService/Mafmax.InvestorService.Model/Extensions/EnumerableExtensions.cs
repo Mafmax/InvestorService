@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Mafmax.InvestorService.Model.Interfaces;
-using Microsoft.EntityFrameworkCore;
 
 namespace Mafmax.InvestorService.Model.Extensions;
 

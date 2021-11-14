@@ -1,4 +1,4 @@
-﻿using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
+﻿using MediatR;
 
 namespace Mafmax.InvestorService.Services.Services.Commands.Login;
 
@@ -6,4 +6,4 @@ namespace Mafmax.InvestorService.Services.Services.Commands.Login;
 /// Command to register new investor
 /// </summary>
 public record RegisterInvestorCommand(string Login, string Password) 
-    : ICommand<int>;
+    : IRequest<int>;

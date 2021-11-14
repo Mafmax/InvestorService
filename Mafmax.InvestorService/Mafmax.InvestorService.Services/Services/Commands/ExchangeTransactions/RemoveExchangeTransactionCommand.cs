@@ -1,4 +1,4 @@
-﻿using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
+﻿using MediatR;
 
 namespace Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
 
@@ -6,4 +6,4 @@ namespace Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions
 /// Command to delete transaction from portfolio
 /// </summary>
 public record RemoveExchangeTransactionCommand(int InvestorId, int PortfolioId, int TransactionId) 
-    : ICommand<int>;
+    : IRequest;

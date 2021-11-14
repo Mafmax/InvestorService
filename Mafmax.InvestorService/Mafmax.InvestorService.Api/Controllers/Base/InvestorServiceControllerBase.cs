@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Investors;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -12,14 +11,9 @@ namespace Mafmax.InvestorService.Api.Controllers.Base;
 public abstract class InvestorServiceControllerBase : ControllerBase
 {
     /// <summary>
-    /// Dispatcher to handle queries 
+    /// Queries and commands resolver
     /// </summary>
-    protected readonly IQueryDispatcher QueryDispatcher;
-
-    /// <summary>
-    /// Dispatcher to handle commands
-    /// </summary>
-    protected readonly ICommandDispatcher CommandDispatcher;
+    protected readonly IMediator Mediator;
 
     /// <summary>
     /// Logger
@@ -27,10 +21,9 @@ public abstract class InvestorServiceControllerBase : ControllerBase
     private readonly ILogger _logger;
 
     /// <inheritdoc />
-    protected InvestorServiceControllerBase(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher, ILogger logger)
+    protected InvestorServiceControllerBase(IMediator mediator, ILogger logger)
     {
-        QueryDispatcher = queryDispatcher;
-        CommandDispatcher = commandDispatcher;
+        Mediator = mediator;
         _logger = logger;
     }
 
@@ -39,7 +32,7 @@ public abstract class InvestorServiceControllerBase : ControllerBase
     /// </summary>
     /// <returns></returns>
     protected async Task<int> GetCurrentInvestorIdAsync()
-        => await QueryDispatcher.AskAsync(new GetInvestorIdByLogin(User.Identity!.Name!));
+        => await Mediator.Send(new GetInvestorIdByLogin(User.Identity!.Name!));
 
     /// <summary>
     /// Logs information level data

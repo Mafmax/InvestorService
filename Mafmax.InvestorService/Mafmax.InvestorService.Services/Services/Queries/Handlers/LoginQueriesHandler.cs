@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Login;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Mafmax.InvestorService.Services.Services.Queries.Handlers;
@@ -14,8 +15,8 @@ namespace Mafmax.InvestorService.Services.Services.Queries.Handlers;
 /// Handle queries associated with login
 /// </summary>
 public class LoginQueriesHandler : ServiceBase<InvestorDbContext>,
-    IQueryHandler<CheckCredentialsQuery, bool>,
-    IQueryHandler<CheckLoginExistsQuery, bool>
+    IRequestHandler<CheckCredentialsQuery, bool>,
+    IRequestHandler<CheckLoginExistsQuery, bool>
 {
     /// <inheritdoc />
     public LoginQueriesHandler(InvestorDbContext db, IMapper mapper) : base(db, mapper) { }
@@ -24,10 +25,10 @@ public class LoginQueriesHandler : ServiceBase<InvestorDbContext>,
     /// Checks credentials
     /// </summary>
     /// <returns>True if credentials are valid</returns>
-    public async Task<bool> AskAsync(CheckCredentialsQuery query)
+    public async Task<bool> Handle(CheckCredentialsQuery query, CancellationToken token)
     {
         var user = await Db.Users
-            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login));
+            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login),token);
 
         if (user is null) return false;
 
@@ -39,9 +40,8 @@ public class LoginQueriesHandler : ServiceBase<InvestorDbContext>,
     /// <summary>
     /// Check login
     /// </summary>
-    /// <param name="query"></param>
     /// <returns>True if login exists</returns>
-    public async Task<bool> AskAsync(CheckLoginExistsQuery query) =>
+    public async Task<bool> Handle(CheckLoginExistsQuery query, CancellationToken token) =>
         await Db.Users
-            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login)) is not null;
+            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login),token) is not null;
 }

@@ -12,7 +12,7 @@ public class PortfoliosQueriesHandlerTests : InvestorServiceQueriesHandlerTestsB
 {
     protected override PortfolioQueriesHandler GetHandler()
     {
-        var db = GetContext("Readonly");
+        var db = GetContext();
 
         var mapper = GetMapper(typeof(PortfolioQueriesHandler).Assembly);
 
@@ -30,7 +30,8 @@ public class PortfoliosQueriesHandlerTests : InvestorServiceQueriesHandlerTestsB
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<EntityNotFoundException>(
+            async () => await AskAsync(query));
     }
 
     [Theory]
@@ -42,7 +43,7 @@ public class PortfoliosQueriesHandlerTests : InvestorServiceQueriesHandlerTestsB
         GetAllPortfoliosQuery query = new(id);
 
         //Act
-        var portfolios = await Handler.AskAsync(query);
+        var portfolios = await AskAsync(query);
         var actual = portfolios.Length;
 
         //Assert
@@ -56,7 +57,7 @@ public class PortfoliosQueriesHandlerTests : InvestorServiceQueriesHandlerTestsB
         GetDetailedPortfolioQuery query = new(InvestorId: 1, PortfolioId: 1);
 
         //Act
-        var portfolio = await Handler.AskAsync(query);
+        var portfolio = await AskAsync(query);
         var asset = portfolio.Transactions.First().Asset;
 
         //Assert
@@ -79,7 +80,8 @@ public class PortfoliosQueriesHandlerTests : InvestorServiceQueriesHandlerTestsB
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<EntityNotFoundException>(
+            async () => await AskAsync(query));
     }
 
     [Theory]
@@ -93,7 +95,7 @@ public class PortfoliosQueriesHandlerTests : InvestorServiceQueriesHandlerTestsB
         GetDetailedPortfolioQuery query = new(investorId, portfolioId);
 
         //Act
-        var portfolio = await Handler.AskAsync(query);
+        var portfolio = await AskAsync(query);
         var actual = portfolio.AssetsDistribution.Aggregate(0m, (total, x) => total + x.Part);
 
         //Assert

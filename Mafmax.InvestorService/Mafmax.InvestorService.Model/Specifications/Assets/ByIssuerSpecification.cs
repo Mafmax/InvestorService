@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 using LinqSpecs.Core;
 using Mafmax.InvestorService.Model.Entities.Assets;
 
 namespace Mafmax.InvestorService.Model.Specifications.Assets;
 
+/// <summary>
+/// Issuer filter for <see cref="AssetEntity"/>
+/// </summary>
 public class ByIssuerSpecification : Specification<AssetEntity>
 {
     private readonly int _issuerId;

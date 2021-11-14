@@ -68,7 +68,7 @@ public static class InvestorDbContextSeed
         return await context.Industries.ToArrayAsync();
     }
       
-    private async static Task<IssuerEntity?[]> SeedIssuersAsync(InvestorDbContext context, CountryEntity[] countries, IndustryEntity[] industries)
+    private async static Task<IssuerEntity[]> SeedIssuersAsync(InvestorDbContext context, CountryEntity[] countries, IndustryEntity[] industries)
     {
         await context.Issuers.AddRangeAsync(
             new IssuerEntity {Country = countries[0], Industry = industries[4], Name = "МТС"},
@@ -83,7 +83,7 @@ public static class InvestorDbContextSeed
         return await context.Issuers.ToArrayAsync();
     }
       
-    private async static Task<AssetEntity?[]> SeedAssetsAsync(InvestorDbContext context, IssuerEntity?[] issuers, StockExchangeEntity[] stockExchanges)
+    private async static Task<AssetEntity[]> SeedAssetsAsync(InvestorDbContext context, IssuerEntity[] issuers, StockExchangeEntity[] stockExchanges)
     {
         var circulations = new CirculationPeriodEntity[]
         {

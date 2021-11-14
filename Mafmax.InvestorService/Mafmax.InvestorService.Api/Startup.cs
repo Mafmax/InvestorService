@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -5,10 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Mafmax.InvestorService.Services.Extensions;
-using Mafmax.InvestorService.Services.Services.Commands;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
-using Mafmax.InvestorService.Services.Services.Queries;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Serilog;
@@ -44,13 +42,9 @@ public class Startup
     {
         services.ConfigureDbContext(Configuration.GetConnectionString("InvestorService"));
 
-        services.AddScoped<IQueryDispatcher, QueryDispatcher>();
+        services.AddRequestHandlers();
 
-        services.AddScoped<ICommandDispatcher, CommandDispatcher>();
-
-        services.AddQueryHandlersScoped();
-
-        services.AddCommandHandlersScoped();
+        services.AddMediatR(Assembly.GetExecutingAssembly());
 
         services.AddAutoMapper();
 

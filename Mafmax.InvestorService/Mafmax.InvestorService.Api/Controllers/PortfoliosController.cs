@@ -5,10 +5,9 @@ using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
 using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Portfolios;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +16,7 @@ using Microsoft.Extensions.Logging;
 namespace Mafmax.InvestorService.Api.Controllers;
 
 /// <summary>
-/// Provides API to work with portfolios
+/// Provides API to work with portfoliosIMediator mediator,
 /// </summary>
 [ApiController]
 [Route("api/portfolios")]
@@ -25,7 +24,7 @@ public class PortfoliosController : InvestorServiceControllerBase
 {
     private const int PortfoliosCountLimit = 3;
     /// <inheritdoc />
-    public PortfoliosController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher, ILogger<PortfoliosController> logger) : base(queryDispatcher, commandDispatcher, logger)
+    public PortfoliosController(IMediator mediator, ILogger<PortfoliosController> logger) : base(mediator, logger)
     {
     }
 
@@ -50,7 +49,7 @@ public class PortfoliosController : InvestorServiceControllerBase
         {
             var id = await GetCurrentInvestorIdAsync();
 
-            return await CommandDispatcher.ExecuteAsync(commandDto.GetCommand(id, PortfoliosCountLimit));
+            return await Mediator.Send(commandDto.GetCommand(id, PortfoliosCountLimit));
         }
         catch (InvalidOperationException ex)
         {
@@ -80,7 +79,7 @@ public class PortfoliosController : InvestorServiceControllerBase
         {
             var id = await GetCurrentInvestorIdAsync();
 
-            await CommandDispatcher.ExecuteAsync(commandDto.GetCommand(id));
+            await Mediator.Send(commandDto.GetCommand(id));
         }
         catch (EntityNotFoundException ex)
         {
@@ -115,7 +114,7 @@ public class PortfoliosController : InvestorServiceControllerBase
     {
         try
         {
-            return await CommandDispatcher.ExecuteAsync(command);
+            return await Mediator.Send(command);
         }
         catch (InvalidOperationException ex)
         {
@@ -146,7 +145,7 @@ public class PortfoliosController : InvestorServiceControllerBase
     {
         try
         {
-            return await QueryDispatcher.AskAsync(query);
+            return await Mediator.Send(query);
         }
         catch (EntityNotFoundException ex)
         {
@@ -174,7 +173,7 @@ public class PortfoliosController : InvestorServiceControllerBase
         {
             var id = await GetCurrentInvestorIdAsync();
             
-            return await QueryDispatcher.AskAsync(queryDto.GetQuery(id));
+            return await Mediator.Send(queryDto.GetQuery(id));
         }
         catch (EntityNotFoundException ex)
         {

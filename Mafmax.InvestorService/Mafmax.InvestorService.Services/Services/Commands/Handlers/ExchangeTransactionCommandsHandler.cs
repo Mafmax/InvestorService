@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
@@ -11,7 +12,7 @@ using Mafmax.InvestorService.Model.Extensions;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static Mafmax.InvestorService.Services.Exceptions.Helpers.ThrowsHelper;
 
@@ -21,8 +22,8 @@ namespace Mafmax.InvestorService.Services.Services.Commands.Handlers;
 /// Handle commands associated with transactions
 /// </summary>
 public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>,
-    ICommandHandler<RemoveExchangeTransactionCommand, int>,
-    ICommandHandler<AddExchangeTransactionCommand, ExchangeTransactionDto>
+    IRequestHandler<RemoveExchangeTransactionCommand>,
+    IRequestHandler<AddExchangeTransactionCommand, ExchangeTransactionDto>
 
 {
     /// <inheritdoc />
@@ -32,14 +33,14 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
     /// Remove transaction from portfolio
     /// </summary>
     ///<exception cref="EntityNotFoundException"/>
-    public async Task<int> ExecuteAsync(RemoveExchangeTransactionCommand command)
+    public async Task<Unit> Handle(RemoveExchangeTransactionCommand command, CancellationToken token)
     {
         var (investorId, portfolioId, transactionId) = command;
 
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
             .ThenInclude(x => x.Transactions)
-            .ByIdAsync(investorId);
+            .ByIdAsync(investorId, token);
 
         var portfolio = investor?.Portfolios
             .ById(portfolioId);
@@ -51,7 +52,9 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
 
         Db.ExchangeTransactions.Remove(transaction);
 
-        return await Db.SaveChangesAsync();
+        await Db.SaveChangesAsync(token);
+
+        return Unit.Value;
 
         void Validate([NotNull] InvestorEntity? i,
             [NotNull] InvestmentPortfolioEntity? ip,
@@ -74,15 +77,15 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
     /// <returns>Created transaction</returns>
     ///<exception cref="EntityNotFoundException"/>
     ///<exception cref="InvalidOperationException"/>
-    public async Task<ExchangeTransactionDto> ExecuteAsync(AddExchangeTransactionCommand command)
+    public async Task<ExchangeTransactionDto> Handle(AddExchangeTransactionCommand command, CancellationToken token)
     {
         var asset = await Db.Assets
             .Include(x => x.Stock)
-            .ByIdAsync(command.AssetId);
+            .ByIdAsync(command.AssetId, token);
 
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
-            .ByIdAsync(command.InvestorId);
+            .ByIdAsync(command.InvestorId, token);
 
         var portfolio = investor?.Portfolios
             .ById(command.PortfolioId);
@@ -93,7 +96,7 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
 
         portfolio.Transactions.Add(transaction);
 
-        await Db.SaveChangesAsync();
+        await Db.SaveChangesAsync(token);
 
         return Mapper.Map<ExchangeTransactionDto>(transaction);
 
@@ -112,7 +115,7 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
 
             if (command.OneLotPrice <= 0)
                 throw new InvalidOperationException("OneLotPrice must be greater than 0");
-
         }
     }
+
 }

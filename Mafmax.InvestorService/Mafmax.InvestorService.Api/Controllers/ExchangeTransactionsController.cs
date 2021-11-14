@@ -4,8 +4,7 @@ using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +20,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class ExchangeTransactionsController : InvestorServiceControllerBase
 {
     ///<inheritdoc/>
-    public ExchangeTransactionsController(ICommandDispatcher commandDispatcher, IQueryDispatcher queryDispatcher, ILogger<ExchangeTransactionsController> logger) : base(queryDispatcher, commandDispatcher, logger)
+    public ExchangeTransactionsController(IMediator mediator, ILogger<ExchangeTransactionsController> logger) : base(mediator, logger)
     {
     }
 
@@ -48,7 +47,7 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
         {
             var id = await GetCurrentInvestorIdAsync();
 
-            return await CommandDispatcher.ExecuteAsync(commandDto.GetCommand(id));
+            return await Mediator.Send(commandDto.GetCommand(id));
         }
         catch (EntityNotFoundException ex)
         {
@@ -82,7 +81,7 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
         try
         {
             var id = await GetCurrentInvestorIdAsync();
-            await CommandDispatcher.ExecuteAsync(command.GetCommand(id));
+            await Mediator.Send(command.GetCommand(id));
             return Ok();
         }
         catch (EntityNotFoundException ex)

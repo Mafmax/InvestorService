@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
@@ -9,7 +10,7 @@ using Mafmax.InvestorService.Model.Extensions;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static Mafmax.InvestorService.Services.Exceptions.Helpers.ThrowsHelper;
 
@@ -19,11 +20,11 @@ namespace Mafmax.InvestorService.Services.Services.Queries.Handlers;
 /// Handle queries associated with assets
 /// </summary>
 public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
-    IQueryHandler<FindAssetsQuery, ShortAssetDto[]>,
-    IQueryHandler<FindAssetsWithClassQuery, ShortAssetDto[]>,
-    IQueryHandler<GetAssetByIsinQuery, AssetDto?>,
-    IQueryHandler<GetAssetByIdQuery, AssetDto?>,
-    IQueryHandler<GetIssuerAssetsQuery, ShortAssetDto[]>
+    IRequestHandler<FindAssetsQuery, ShortAssetDto[]>,
+    IRequestHandler<FindAssetsWithClassQuery, ShortAssetDto[]>,
+    IRequestHandler<GetAssetByIsinQuery, AssetDto?>,
+    IRequestHandler<GetAssetByIdQuery, AssetDto?>,
+    IRequestHandler<GetIssuerAssetsQuery, ShortAssetDto[]>
 {
     private static void CheckSearchString(FindAssetsQuery query)
     {
@@ -37,7 +38,7 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
         .Include(x => x.Circulation)
         .Include(x => x.Issuer).ThenInclude(x => x.Country)
         .Include(x => x.Issuer).ThenInclude(x => x.Industry);
-    
+
     /// <inheritdoc />
     public AssetsQueriesHandler(InvestorDbContext db, IMapper mapper) : base(db, mapper) { }
 
@@ -46,14 +47,14 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// </summary>
     /// <returns>Array of assets found</returns>
     /// <see cref="InvalidOperationException"/>
-    public async Task<ShortAssetDto[]> AskAsync(FindAssetsQuery query)
+    public async Task<ShortAssetDto[]> Handle(FindAssetsQuery query, CancellationToken token)
     {
         CheckSearchString(query);
         return await Db.Assets
             .Include(x => x.Issuer)
             .Where(AssetEntity.Specs.Search(query.SearchString))
             .Select(x => Mapper.Map<ShortAssetDto>(x))
-            .ToArrayAsync();
+            .ToArrayAsync(token);
     }
 
     /// <summary>
@@ -61,14 +62,14 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// </summary>
     /// <returns>Array of assets found</returns>
     /// <exception cref="InvalidOperationException"/>
-    public async Task<ShortAssetDto[]> AskAsync(FindAssetsWithClassQuery query)
+    public async Task<ShortAssetDto[]> Handle(FindAssetsWithClassQuery query, CancellationToken token)
     {
         CheckSearchString(query);
         return await Db.Assets
             .Include(x => x.Issuer)
             .Where(AssetEntity.Specs.Search(query.SearchString, query.AssetsClass))
             .Select(x => Mapper.Map<ShortAssetDto>(x))
-            .ToArrayAsync();
+            .ToArrayAsync(token);
     }
 
     /// <summary>
@@ -76,10 +77,10 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// </summary>
     /// <returns>Asset</returns>
     ///<exception cref="EntityNotFoundException"/>
-    public async Task<AssetDto?> AskAsync(GetAssetByIsinQuery query)
+    public async Task<AssetDto?> Handle(GetAssetByIsinQuery query, CancellationToken token)
     {
         var asset = await FullAssetWithIncludes
-            .FirstOrDefaultAsync(x => x.Isin.Equals(query.Isin));
+            .FirstOrDefaultAsync(x => x.Isin.Equals(query.Isin), token);
 
         if (asset is null) ThrowEntityNotFound<AssetEntity>(query.Isin);
 
@@ -91,9 +92,9 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// </summary>
     /// <returns>Array of issuer assets</returns>
     /// <exception cref="EntityNotFoundException"/>
-    public async Task<ShortAssetDto[]> AskAsync(GetIssuerAssetsQuery query)
+    public async Task<ShortAssetDto[]> Handle(GetIssuerAssetsQuery query, CancellationToken token)
     {
-        var issuer = await Db.Issuers.ByIdAsync(query.IssuerId);
+        var issuer = await Db.Issuers.ByIdAsync(query.IssuerId, token);
 
         if (issuer is null) ThrowEntityNotFound<IssuerEntity>(query.IssuerId);
 
@@ -103,7 +104,7 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
             .Where(AssetEntity.Specs.ByIssuerValidOnly(query.IssuerId))
             .OrderBy(x => x.Circulation.Start)
             .Select(x => Mapper.Map<ShortAssetDto>(x))
-            .ToArrayAsync();
+            .ToArrayAsync(token);
 
     }
 
@@ -112,10 +113,10 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// </summary>
     /// <returns>Asset</returns>
     /// <exception cref="EntityNotFoundException"/>
-    public async Task<AssetDto?> AskAsync(GetAssetByIdQuery query)
+    public async Task<AssetDto?> Handle(GetAssetByIdQuery query, CancellationToken token)
     {
         var asset = await FullAssetWithIncludes
-            .ByIdAsync(query.Id);
+            .ByIdAsync(query.Id, token);
 
         if (asset is null) ThrowEntityNotFound<AssetEntity>(query.Id);
 

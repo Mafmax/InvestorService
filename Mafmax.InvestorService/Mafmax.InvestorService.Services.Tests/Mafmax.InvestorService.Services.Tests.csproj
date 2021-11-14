@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mafmax.InvestorService\Mafmax.InvestorService.Services\Mafmax.InvestorService.Services.csproj" />
+    <ProjectReference Include="..\Mafmax.InvestorService.Services.MockData\Mafmax.InvestorService.Services.MockData.csproj" />
+    <ProjectReference Include="..\Mafmax.InvestorService.Services\Mafmax.InvestorService.Services.csproj" />
   </ItemGroup>
 
 </Project>

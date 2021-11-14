@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Mafmax.InvestorService.Model.Context;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -31,32 +31,22 @@ public static class ServiceCollectionExtensions
     /// <summary>
     /// Injects mapper into container
     /// </summary>
-    public static void AddAutoMapper(this IServiceCollection services)
-    {
+    public static void AddAutoMapper(this IServiceCollection services) => 
         services.AddAutoMapper(typeof(ServiceCollectionExtensions).Assembly);
-    }
 
     /// <summary>
     /// Injects query handlers into container
     /// </summary>
-    public static void AddQueryHandlersScoped(this IServiceCollection services)
-    {
-        services.AddHandlersScoped(typeof(IQueryHandler<,>));
-    }
+    public static void AddRequestHandlers(this IServiceCollection services) => 
+        services.AddRequestHandlers(typeof(IRequestHandler<,>),Assembly.GetExecutingAssembly());
 
-    /// <summary>
-    /// Injects command handlers into container
-    /// </summary>
-    public static void AddCommandHandlersScoped(this IServiceCollection services)
+    private static void AddRequestHandlers(this IServiceCollection services, Type type,Assembly assembly)
     {
-        services.AddHandlersScoped(typeof(ICommandHandler<,>));
-    }
-
-    private static void AddHandlersScoped(this IServiceCollection services, Type type)
-    {
-        foreach (var handlerType in GetAllImplementedOpenInterfaceTypes(type))
+        var implementations = GetAllImplementedOpenInterfaceTypes(type,assembly);
+        foreach (var handlerType in implementations)
         {
-            foreach (var interfaceType in handlerType.GetInterfaces())
+            var interfaceTypes = handlerType.GetInterfaces();
+            foreach (var interfaceType in interfaceTypes)
             {
                 if (interfaceType.GetGenericTypeDefinition() != type) continue;
                 services.AddScoped(interfaceType, handlerType);
@@ -64,11 +54,9 @@ public static class ServiceCollectionExtensions
         }
     }
 
-    private static IEnumerable<Type> GetAllImplementedOpenInterfaceTypes(Type openInterfaceType)
-    {
-        return openInterfaceType.Assembly
+    private static IEnumerable<Type> GetAllImplementedOpenInterfaceTypes(Type openInterfaceType,Assembly assembly) =>
+        assembly
             .GetTypes()
             .Where(x => !x.IsAbstract && !x.IsInterface && x.GetInterfaces().Any(y =>
                 y.IsGenericType && y.GetGenericTypeDefinition() == openInterfaceType));
-    }
 }

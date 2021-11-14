@@ -1,5 +1,5 @@
 ﻿using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
+using MediatR;
 
 namespace Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 
@@ -9,4 +9,4 @@ namespace Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 public record ChangePortfolioCommand(int InvestorId,
     int PortfolioId,
     string? NewName,
-    string? NewTargetDescription) : ICommand<PortfolioDetailedInfoDto>;
+    string? NewTargetDescription) : IRequest<PortfolioDetailedInfoDto>;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using Mafmax.InvestorService.Model.Context;
@@ -9,8 +10,8 @@ using Mafmax.InvestorService.Model.Entities.Users;
 using Mafmax.InvestorService.Model.Extensions;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Portfolios;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using static Mafmax.InvestorService.Services.Exceptions.Helpers.ThrowsHelper;
 using DistributionAggregate = System.ValueTuple<System.Collections.Generic.Dictionary<string, decimal>, decimal>;
@@ -21,8 +22,8 @@ namespace Mafmax.InvestorService.Services.Services.Queries.Handlers;
 /// Handle queries associated with portfolio
 /// </summary>
 public class PortfolioQueriesHandler : ServiceBase<InvestorDbContext>,
-    IQueryHandler<GetAllPortfoliosQuery, PortfolioShortInfoDto[]>,
-    IQueryHandler<GetDetailedPortfolioQuery, PortfolioDetailedInfoDto>
+    IRequestHandler<GetAllPortfoliosQuery, PortfolioShortInfoDto[]>,
+    IRequestHandler<GetDetailedPortfolioQuery, PortfolioDetailedInfoDto>
 
 {
     /// <inheritdoc />
@@ -35,11 +36,11 @@ public class PortfolioQueriesHandler : ServiceBase<InvestorDbContext>,
     /// </summary>
     /// <returns>Array of portfolios found</returns>
     /// <exception cref="EntityNotFoundException"/>
-    public async Task<PortfolioShortInfoDto[]> AskAsync(GetAllPortfoliosQuery query)
+    public async Task<PortfolioShortInfoDto[]> Handle(GetAllPortfoliosQuery query,CancellationToken token)
     {
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
-            .ByIdAsync(query.InvestorId);
+            .ByIdAsync(query.InvestorId,token);
 
         if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.InvestorId);
 
@@ -52,16 +53,17 @@ public class PortfolioQueriesHandler : ServiceBase<InvestorDbContext>,
     /// Gets detailed information of investor portfolio
     /// </summary>
     /// <param name="query"></param>
+    /// <param name="token"></param>
     /// <returns>Detailed portfolio info</returns>
     /// <exception cref="EntityNotFoundException"/>
-    public async Task<PortfolioDetailedInfoDto> AskAsync(GetDetailedPortfolioQuery query)
+    public async Task<PortfolioDetailedInfoDto> Handle(GetDetailedPortfolioQuery query, CancellationToken token)
     {
         var (investorId, portfolioId) = query;
 
         var investor = await Db.Investors
             .Include(x => x.Portfolios).ThenInclude(x => x.Transactions).ThenInclude(x => x.Asset).ThenInclude(x => x.Stock)
             .Include(x => x.Portfolios).ThenInclude(x => x.Transactions).ThenInclude(x => x.Asset).ThenInclude(x => x.Issuer)
-            .ByIdAsync(investorId);
+            .ByIdAsync(investorId,token);
 
         if (investor is null) ThrowEntityNotFound<InvestorEntity>(investorId);
 

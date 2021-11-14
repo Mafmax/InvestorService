@@ -37,5 +37,5 @@ public class InvestmentPortfolioEntity : IHasId<int>
     /// <summary>
     /// Collection of <inheritdoc cref="ExchangeTransactionEntity"/>
     /// </summary>
-    public ICollection<ExchangeTransactionEntity> Transactions { get; set; } = new List<ExchangeTransactionEntity>();
+    public List<ExchangeTransactionEntity> Transactions { get; set; } = new();
 }

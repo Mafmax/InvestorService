@@ -13,14 +13,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Mode
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{DAA9F818-0447-455E-AE9C-5A62C6A0A677}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Services.Tests", "..\Mafmax.InvestorService.Services.Tests\Mafmax.InvestorService.Services.Tests.csproj", "{76A3F9CA-5519-4B24-A2C1-01BD6F989789}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Services.MockData", "..\Mafmax.InvestorService.Services.MockData\Mafmax.InvestorService.Services.MockData.csproj", "{02805198-B308-4647-9B6F-D176D20574A0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8D5EDF62-8DD5-437D-982D-F14C82762964}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Services.MockData", "Mafmax.InvestorService.Services.MockData\Mafmax.InvestorService.Services.MockData.csproj", "{FB870C19-DC0D-4206-A216-611A29DC0B38}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mafmax.InvestorService.Services.Tests", "Mafmax.InvestorService.Services.Tests\Mafmax.InvestorService.Services.Tests.csproj", "{EBA520C1-8EEC-4538-93A3-52705CF1320E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -48,14 +48,14 @@ Global
 		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DAA9F818-0447-455E-AE9C-5A62C6A0A677}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76A3F9CA-5519-4B24-A2C1-01BD6F989789}.Release|Any CPU.Build.0 = Release|Any CPU
-		{02805198-B308-4647-9B6F-D176D20574A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{02805198-B308-4647-9B6F-D176D20574A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{02805198-B308-4647-9B6F-D176D20574A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{02805198-B308-4647-9B6F-D176D20574A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB870C19-DC0D-4206-A216-611A29DC0B38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB870C19-DC0D-4206-A216-611A29DC0B38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB870C19-DC0D-4206-A216-611A29DC0B38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB870C19-DC0D-4206-A216-611A29DC0B38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBA520C1-8EEC-4538-93A3-52705CF1320E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBA520C1-8EEC-4538-93A3-52705CF1320E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBA520C1-8EEC-4538-93A3-52705CF1320E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBA520C1-8EEC-4538-93A3-52705CF1320E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

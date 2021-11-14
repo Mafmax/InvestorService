@@ -28,7 +28,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.ExecuteAsync(command));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Execute(command));
     }
 
     [Fact]
@@ -43,7 +43,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
         RemoveExchangeTransactionCommand command = new(1, 1, 1);
 
         //Act
-        await GetHandler(token).ExecuteAsync(command);
+        await GetHandler(token).Handle(command,default);
         await using (var db = GetDb(token))
             actualDifference = startCount - db.ExchangeTransactions.Count();
 
@@ -65,7 +65,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Handler.ExecuteAsync(command));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Execute(command));
     }
 
     [Fact]
@@ -83,7 +83,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
             new(1, 1, 1, true, 100, 50);
 
         //Act
-        await GetHandler(token).ExecuteAsync(command);
+        await GetHandler(token).Handle(command,default);
 
         await using (var db = GetDb(token))
             actualDifference =await db.ExchangeTransactions.CountAsync() - startCount;

@@ -1,5 +1,5 @@
 ﻿using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
+using MediatR;
 
 namespace Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
 
@@ -11,4 +11,4 @@ public record AddExchangeTransactionCommand(int InvestorId,
     int AssetId,
     bool OrderToBuy, 
     decimal OneLotPrice, 
-    int LotsCount) : ICommand<ExchangeTransactionDto>;
+    int LotsCount) : IRequest<ExchangeTransactionDto>;

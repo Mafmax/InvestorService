@@ -1,8 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Reflection.Metadata;
-using System.Security.Cryptography.X509Certificates;
 using LinqSpecs.Core;
 using Mafmax.InvestorService.Model.Interfaces;
 using Mafmax.InvestorService.Model.Specifications.Assets;
@@ -20,19 +18,38 @@ public abstract class AssetEntity : IHasId<int>
 {
 
     /// <summary>
-    /// Specifications for AssetEntity and derived
+    /// Specifications for <see cref="AssetEntity"/> and derived
     /// </summary>
     public static class Specs
     {
+
+        /// <summary>
+        /// Search assets specification
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="searchType"></param>
+        /// <returns></returns>
         public static Specification<AssetEntity> Search(string searchString, StringComparison searchType = StringComparison.OrdinalIgnoreCase) =>
             new SearchByIsinSpecification(searchString, searchType)
             || new SearchByNameSpecification(searchString, searchType)
             || new SearchByTickerSpecification(searchString, searchType);
 
+        /// <summary>
+        /// Search assets specification
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <param name="className">Assets class name to search</param>
+        /// <param name="searchType"></param>
+        /// <returns></returns>
         public static Specification<AssetEntity> Search(string searchString, string className, StringComparison searchType = StringComparison.OrdinalIgnoreCase) =>
             Search(searchString, searchType)
             && new InClassSpecification(className, searchType);
 
+        /// <summary>
+        /// Search valid issuer assets specification
+        /// </summary>
+        /// <param name="issuerId"></param>
+        /// <returns></returns>
         public static Specification<AssetEntity> ByIssuerValidOnly(int issuerId) =>
             new ByIssuerSpecification(issuerId)
             && new IsValidSpecification();

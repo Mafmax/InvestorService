@@ -11,7 +11,7 @@ public class LoginQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBase<Lo
 {
     protected override LoginQueriesHandler GetHandler()
     {
-        var db = GetContext("Readonly");
+        var db = GetContext();
             
         var mapper = GetMapper(typeof(LoginQueriesHandler).Assembly);
 
@@ -29,7 +29,7 @@ public class LoginQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBase<Lo
         CheckCredentialsQuery query = new(login, password);
 
         //Act
-        var actual = await Handler.AskAsync(query);
+        var actual = await AskAsync(query);
 
         //Assert
         Assert.Equal(expected,actual);
@@ -47,7 +47,7 @@ public class LoginQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBase<Lo
         CheckLoginExistsQuery query = new(login);
 
         //Act
-        var actual = await Handler.AskAsync(query);
+        var actual = await AskAsync(query);
 
         //Assert
         Assert.Equal(expected, actual);

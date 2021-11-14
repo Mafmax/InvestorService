@@ -1,5 +1,5 @@
 ﻿using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 
 namespace Mafmax.InvestorService.Services.Services.Queries.Assets;
 
@@ -7,4 +7,4 @@ namespace Mafmax.InvestorService.Services.Services.Queries.Assets;
 /// Query to get all issuer assets
 /// </summary>
 public record GetIssuerAssetsQuery(int IssuerId)
-    : IQuery<ShortAssetDto[]>;
+    : IRequest<ShortAssetDto[]>;

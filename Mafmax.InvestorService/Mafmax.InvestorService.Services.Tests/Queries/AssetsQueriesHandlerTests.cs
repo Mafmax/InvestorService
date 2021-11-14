@@ -13,7 +13,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
 {
     protected override AssetsQueriesHandler GetHandler()
     {
-        var db = GetContext("Readonly");
+        var db = GetContext();
         var mapper = GetMapper(typeof(AssetsQueriesHandler).Assembly);
         return new(db, mapper);
     }
@@ -28,7 +28,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         GetAssetByIdQuery query = new(id);
 
         //Act
-        var asset = await Handler.AskAsync(query);
+        var asset = await AskAsync(query);
 
         //Assert
         Assert.Equal(id, asset!.Id);
@@ -44,7 +44,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         GetAssetByIsinQuery query = new(isin);
 
         //Act
-        var asset = await Handler.AskAsync(query);
+        var asset = await AskAsync(query);
 
         //Assert
         Assert.Equal(isin, asset!.Isin);
@@ -59,7 +59,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await AskAsync(query));
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await AskAsync(query));
     }
 
     [Theory]
@@ -85,7 +85,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<InvalidOperationException>(async () => await AskAsync(query));
 
     }
 
@@ -99,7 +99,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         FindAssetsWithClassQuery query = new(searchString, classFilter, MinimalSearchStringLength: 1);
 
         //Act
-        var assets = await Handler.AskAsync(query);
+        var assets = await AskAsync(query);
 
         //Assert
         Assert.Empty(assets);
@@ -115,7 +115,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         FindAssetsQuery query = new(searchString, MinimalSearchStringLength: 1);
 
         //Act
-        var assets = await Handler.AskAsync(query);
+        var assets = await AskAsync(query);
 
         //Assert
         Assert.Empty(assets);
@@ -131,7 +131,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         FindAssetsQuery query = new(searchString, MinimalSearchStringLength: 1);
 
         //Act
-        var assets = await Handler.AskAsync(query);
+        var assets = await AskAsync(query);
 
         //Assert
         Assert.NotEmpty(assets);
@@ -147,7 +147,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         FindAssetsWithClassQuery query = new(searchString, AssetsClass: "Акция", MinimalSearchStringLength: 1);
 
         //Act
-        var assets = await Handler.AskAsync(query);
+        var assets = await AskAsync(query);
 
         //Assert
         Assert.NotEmpty(assets);
@@ -163,7 +163,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await AskAsync(query));
     }
 
     [Theory]
@@ -176,7 +176,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         GetIssuerAssetsQuery query = new(id);
 
         //Act
-        var assets = await Handler.AskAsync(query);
+        var assets = await AskAsync(query);
 
         //Assert
         Assert.NotEmpty(assets);
@@ -191,7 +191,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
         GetIssuerAssetsQuery query = new(id);
 
         //Act
-        var assets = await Handler.AskAsync(query);
+        var assets = await AskAsync(query);
 
         //Assert
         Assert.Equal(expectedCount,assets.Length);

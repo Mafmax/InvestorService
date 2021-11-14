@@ -9,7 +9,10 @@ using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.Assets;
 using Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
 using Mafmax.InvestorService.Model.Entities.Users;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Mafmax.InvestorService.Services.Extensions;
 
 namespace Mafmax.InvestorService.Services.MockData.Context;
 
@@ -18,34 +21,47 @@ public static class MockProvider
 
     private static readonly object Locker = new();
 
+    public static IMediator GetMediator(Assembly assembly) => 
+        GetMediator(assembly, Guid.NewGuid());
+
+    private static IMediator GetMediator(Assembly assembly,Guid token)
+    {
+        IServiceCollection s = new ServiceCollection();
+
+        s.AddScoped(_=>GetContext(token));
+
+        s.AddRequestHandlers();
+
+        s.AddAutoMapper();
+
+        s.AddMediatR(assembly);
+
+        return s.BuildServiceProvider().GetRequiredService<IMediator>();
+    }
+
     public static IMapper GetMapper(Assembly assembly)
     {
         var types = assembly.GetTypes().Where(x => x.BaseType == typeof(Profile));
         var mapper = new MapperConfiguration(cfg =>
         {
-            foreach (var type in types)
-            {
+            foreach (var type in types) 
                 cfg.AddProfile(type);
-            }
         });
         return mapper.CreateMapper();
     }
-
+    
     public static InvestorDbContext GetContext(string dbName)
     {
-        var options = new DbContextOptionsBuilder<InvestorDbContext>()
-            .UseInMemoryDatabase(dbName)
-            .Options;
+        var options =
+        new DbContextOptionsBuilder<InvestorDbContext>()
+            .UseInMemoryDatabase(dbName).Options;
 
-        lock (Locker)
-        {
+        lock (Locker) 
             return GetContext(options);
-        }
     }
 
-    public static InvestorDbContext GetContext(Guid token) => 
+    public static InvestorDbContext GetContext(Guid token) =>
         GetContext(token.ToString());
-        
 
     private static InvestorDbContext GetContext(DbContextOptions<InvestorDbContext> options)
     {
@@ -144,22 +160,22 @@ public static class MockProvider
             new()
             {
                 Name = "Portfolio1", TargetDescription = "SomeTargetDescription1",
-                Transactions = transactions[..3]
+                Transactions = new(transactions[..3])
             },
             new()
             {
                 Name = "Portfolio2", TargetDescription = "SomeTargetDescription2",
-                Transactions = transactions[3..5]
+                Transactions = new(transactions[3..5])
             },
             new()
             {
                 Name = "Portfolio3", TargetDescription = "SomeTargetDescription3",
-                Transactions = transactions[5..10]
+                Transactions = new(transactions[5..10])
             },
             new()
             {
                 Name = "Portfolio4", TargetDescription = "SomeTargetDescription4",
-                Transactions = transactions[10..12]
+                Transactions = new(transactions[10..12])
             },
         };
 
@@ -167,9 +183,9 @@ public static class MockProvider
         new UserEntity[]
         {
             new InvestorEntity()
-                {Login = "Investor1", PasswordHash = SHA256.HashData(Encoding.Default.GetBytes("12345")), Portfolios = portfolios[..3]},
+                {Login = "Investor1", PasswordHash = SHA256.HashData(Encoding.Default.GetBytes("12345")), Portfolios = new(portfolios[..3])},
             new InvestorEntity()
-                {Login = "Investor2", PasswordHash = SHA256.HashData(Encoding.Default.GetBytes("12345")), Portfolios = portfolios[3..4]},
+                {Login = "Investor2", PasswordHash = SHA256.HashData(Encoding.Default.GetBytes("12345")), Portfolios = new(portfolios[3..4])},
             new InvestorEntity()
                 {Login = "Investor3", PasswordHash = SHA256.HashData(Encoding.Default.GetBytes("12345"))}
         };

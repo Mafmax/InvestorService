@@ -7,9 +7,8 @@ using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
@@ -25,7 +24,7 @@ public class AssetsController : InvestorServiceControllerBase
     private const int MinimalSearchStringLength = 3;
 
     /// <inheritdoc />
-    public AssetsController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher, ILogger<AssetsController> logger) : base(queryDispatcher, commandDispatcher, logger)
+    public AssetsController(IMediator mediator, ILogger<AssetsController> logger) : base(mediator, logger)
     {
     }
 
@@ -42,7 +41,7 @@ public class AssetsController : InvestorServiceControllerBase
     {
         try
         {
-            return await QueryDispatcher.AskAsync(query);
+            return await Mediator.Send(query);
         }
         catch (EntityNotFoundException ex)
         {
@@ -64,7 +63,7 @@ public class AssetsController : InvestorServiceControllerBase
     {
         try
         {
-            return await QueryDispatcher.AskAsync(query);
+            return await Mediator.Send(query);
         }
         catch (EntityNotFoundException ex)
         {
@@ -87,7 +86,7 @@ public class AssetsController : InvestorServiceControllerBase
         try
         {
             return GroupAssetsByClass(
-                await QueryDispatcher.AskAsync(queryDto.GetQuery(MinimalSearchStringLength)));
+                await Mediator.Send(queryDto.GetQuery(MinimalSearchStringLength)));
         }
         catch (InvalidOperationException ex)
         {
@@ -115,7 +114,7 @@ public class AssetsController : InvestorServiceControllerBase
                 return await FindAsync(queryDto);
 
             return GroupAssetsByClass(
-                await QueryDispatcher.AskAsync(queryDto.GetQuery(MinimalSearchStringLength, assetsClass)));
+                await Mediator.Send(queryDto.GetQuery(MinimalSearchStringLength, assetsClass)));
         }
         catch (InvalidOperationException ex)
         {
@@ -137,7 +136,7 @@ public class AssetsController : InvestorServiceControllerBase
     {
         try
         {
-            return await QueryDispatcher.AskAsync(query);
+            return await Mediator.Send(query);
         }
         catch (EntityNotFoundException ex)
         {

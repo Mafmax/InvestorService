@@ -12,7 +12,7 @@ public class InvestorsQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBas
 {
     protected override InvestorsQueriesHandler GetHandler()
     {
-        var db = GetContext("Readonly");
+        var db = GetContext();
 
         var mapper = GetMapper(typeof(InvestorsQueriesHandler).Assembly);
 
@@ -30,7 +30,7 @@ public class InvestorsQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBas
         //Act
 
         //Assert
-        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await Handler.AskAsync(query));
+        await Assert.ThrowsAsync<EntityNotFoundException>(async () => await AskAsync(query));
     }
 
     [Theory]
@@ -42,7 +42,7 @@ public class InvestorsQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBas
         GetInvestorIdByLogin query = new(login);
 
         //Act
-        var actualId= await GetHandler().AskAsync(query);
+        var actualId= await AskAsync(query);
 
         //Assert
         Assert.Equal(id,actualId);

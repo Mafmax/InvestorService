@@ -2,10 +2,9 @@
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Commands.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
-using Mafmax.InvestorService.Services.Services.Queries.Interfaces;
 using Mafmax.InvestorService.Services.Services.Queries.Issuers;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -20,7 +19,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class IssuersController : InvestorServiceControllerBase
 {
     /// <inheritdoc />
-    public IssuersController(IQueryDispatcher queryDispatcher, ICommandDispatcher commandDispatcher, ILogger<IssuersController> logger) : base(queryDispatcher, commandDispatcher, logger)
+    public IssuersController(IMediator mediator, ILogger<IssuersController> logger) : base(mediator, logger)
     {
     }
 
@@ -31,10 +30,8 @@ public class IssuersController : InvestorServiceControllerBase
     /// <responce code="200">Returns list of issuer companies</responce>
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<ActionResult<IssuerDto[]>> Get([FromQuery] GetIssuersQuery query)
-    {
-        return await QueryDispatcher.AskAsync(query);
-    }
+    public async Task<ActionResult<IssuerDto[]>> Get([FromQuery] GetIssuersQuery query) => 
+        await Mediator.Send(query);
 
     /// <summary>
     /// Gets all assets of issuer-company
@@ -49,7 +46,7 @@ public class IssuersController : InvestorServiceControllerBase
     {
         try
         {
-            return await QueryDispatcher.AskAsync(query);
+            return await Mediator.Send(query);
         }
         catch (EntityNotFoundException ex)
         {
