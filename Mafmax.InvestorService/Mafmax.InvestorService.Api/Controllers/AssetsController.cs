@@ -9,7 +9,6 @@ using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
 
 namespace Mafmax.InvestorService.Api.Controllers;
 

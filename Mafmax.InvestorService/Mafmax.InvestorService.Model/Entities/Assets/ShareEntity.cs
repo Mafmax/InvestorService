@@ -1,4 +1,5 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
 namespace Mafmax.InvestorService.Model.Entities.Assets;
 
 /// <summary>
@@ -7,6 +8,7 @@ namespace Mafmax.InvestorService.Model.Entities.Assets;
 public class ShareEntity : AssetEntity
 {
     /// <inheritdoc />
+    // ReSharper disable once UnusedMember.Global
     protected ShareEntity()
     {
     }
@@ -28,5 +30,6 @@ public class ShareEntity : AssetEntity
     /// <summary>
     /// Flag of preferred or common share
     /// </summary>
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public bool IsPreferred { get; protected set; }
 }

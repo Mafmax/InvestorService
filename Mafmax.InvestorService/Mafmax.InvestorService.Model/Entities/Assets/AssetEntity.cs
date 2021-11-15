@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using LinqSpecs.Core;
 using Mafmax.InvestorService.Model.Interfaces;
 using Mafmax.InvestorService.Model.Specifications.Assets;
+// ReSharper disable MemberCanBeProtected.Global
 
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global

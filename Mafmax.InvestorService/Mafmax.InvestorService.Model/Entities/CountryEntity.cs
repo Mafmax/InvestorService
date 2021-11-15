@@ -33,5 +33,6 @@ public class CountryEntity
     /// <summary>
     /// Country name
     /// </summary>
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public string Name { get; protected set; } = string.Empty;
 }

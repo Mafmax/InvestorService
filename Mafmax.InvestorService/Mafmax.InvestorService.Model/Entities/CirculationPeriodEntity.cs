@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 // ReSharper disable PropertyCanBeMadeInitOnly.Global
@@ -15,6 +14,7 @@ public class CirculationPeriodEntity
     /// <summary>
     /// <inheritdoc cref="CirculationPeriodEntity"/>
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     protected CirculationPeriodEntity()
     {
     }
@@ -40,12 +40,14 @@ public class CirculationPeriodEntity
     /// Start date of circulation
     /// </summary>
     [Column("StartCirculation")]
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public DateTime Start { get; protected set; }
 
     /// <summary>
     /// End date of circulation
     /// </summary>
     [Column("EndCirculation")]
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public DateTime? End { get; protected set; }
 
 }

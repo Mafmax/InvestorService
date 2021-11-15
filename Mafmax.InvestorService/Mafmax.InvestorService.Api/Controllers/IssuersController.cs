@@ -7,7 +7,6 @@ using Mafmax.InvestorService.Services.Services.Queries.Issuers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Mafmax.InvestorService.Api.Controllers;
 

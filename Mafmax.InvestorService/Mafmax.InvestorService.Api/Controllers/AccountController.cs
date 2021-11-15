@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Mafmax.InvestorService.Api.Controllers;
 
@@ -22,7 +21,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class AccountController : InvestorServiceControllerBase
 {
     /// <inheritdoc />
-    public AccountController(IMediator mediator, ILogger<AccountController> logger) : base(null)
+    public AccountController(IMediator mediator) : base(mediator)
     {
     }
 

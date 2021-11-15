@@ -62,5 +62,6 @@ public class ExchangeTransactionEntity: IHasId<int>
     /// <summary>
     /// Count of lots in one transaction
     /// </summary>
+    // ReSharper disable once AutoPropertyCanBeMadeGetOnly.Global
     public int LotsCount { get; protected set; }
 }

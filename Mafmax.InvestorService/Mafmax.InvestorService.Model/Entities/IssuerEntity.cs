@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Mafmax.InvestorService.Model.Interfaces;
-
 // ReSharper disable UnusedAutoPropertyAccessor.Global
-// ReSharper disable PropertyCanBeMadeInitOnly.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+
 
 namespace Mafmax.InvestorService.Model.Entities;
 
@@ -14,6 +14,7 @@ public class IssuerEntity : IHasId<int>
     /// <summary>
     /// <inheritdoc cref="IssuerEntity"/>
     /// </summary>
+    // ReSharper disable once UnusedMember.Global
     protected IssuerEntity()
     {
     }

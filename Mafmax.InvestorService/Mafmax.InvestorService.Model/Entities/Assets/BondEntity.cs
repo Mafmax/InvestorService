@@ -1,4 +1,6 @@
 ﻿// ReSharper disable UnusedAutoPropertyAccessor.Global
+// ReSharper disable MemberCanBePrivate.Global
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
 namespace Mafmax.InvestorService.Model.Entities.Assets;
 
 /// <summary>
@@ -7,6 +9,7 @@ namespace Mafmax.InvestorService.Model.Entities.Assets;
 public class BondEntity : AssetEntity
 {
     /// <inheritdoc />
+    // ReSharper disable once UnusedMember.Global
     protected BondEntity()
     {
     }

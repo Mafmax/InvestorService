@@ -46,6 +46,7 @@ public class InvestmentPortfolioEntity : IHasId<int>
     /// <summary>
     /// Description of portfolio goal
     /// </summary>
+    // ReSharper disable once MemberCanBePrivate.Global
     public string TargetDescription { get; protected set; } = string.Empty;
 
     /// <summary>

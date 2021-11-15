@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Mafmax.InvestorService.Services.Services.Queries.Investors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Mafmax.InvestorService.Api.Controllers.Base;
 
