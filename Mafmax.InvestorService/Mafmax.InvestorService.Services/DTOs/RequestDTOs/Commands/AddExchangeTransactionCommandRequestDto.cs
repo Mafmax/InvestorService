@@ -3,7 +3,7 @@
 namespace Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 
 /// <summary>
-/// DTO to receive user data from request for <see cref="AddExchangeTransactionCommand"/>
+/// DTO to receive user data from request for <see cref="CreateExchangeTransactionCommand"/>
 /// </summary>
 public record AddExchangeTransactionCommandRequestDto(int PortfolioId,
     int AssetId,
@@ -13,17 +13,15 @@ public record AddExchangeTransactionCommandRequestDto(int PortfolioId,
 {
 
     /// <summary>
-    /// Creates command (<inheritdoc cref="AddExchangeTransactionCommand"/>) from DTO
+    /// Creates command (<inheritdoc cref="CreateExchangeTransactionCommand"/>) from DTO
     /// </summary>
     /// <param name="investorId">Investor id</param>
-    /// <returns>Instance of <see cref="AddExchangeTransactionCommand"/></returns>
-    public AddExchangeTransactionCommand GetCommand(int investorId)
-    {
-        return new AddExchangeTransactionCommand(InvestorId: investorId,
+    /// <returns>Instance of <see cref="CreateExchangeTransactionCommand"/></returns>
+    public CreateExchangeTransactionCommand GetCommand(int investorId) =>
+        new(investorId,
             PortfolioId,
             AssetId,
             OrderToBuy,
             OneLotPrice,
             LotsCount);
-    }
 }

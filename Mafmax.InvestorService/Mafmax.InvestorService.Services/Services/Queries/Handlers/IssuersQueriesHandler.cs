@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Mafmax.InvestorService.Model.Context;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.Services.Queries.Issuers;
@@ -31,7 +31,7 @@ public class IssuersQueriesHandler : ServiceBase<InvestorDbContext>,
         => await Db.Issuers
             .Include(x => x.Country)
             .Include(x => x.Industry)
-            .Select(x => Mapper.Map<IssuerDto>(x))
+            .ProjectTo<IssuerDto>(Mapper.ConfigurationProvider)
             .ToArrayAsync(token);
 
 }

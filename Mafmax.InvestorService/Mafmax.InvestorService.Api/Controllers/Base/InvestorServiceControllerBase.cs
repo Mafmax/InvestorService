@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Services.Services.Queries.Investors;
 using MediatR;
@@ -15,30 +15,16 @@ public abstract class InvestorServiceControllerBase : ControllerBase
     /// </summary>
     protected readonly IMediator Mediator;
 
-    /// <summary>
-    /// Logger
-    /// </summary>
-    private readonly ILogger _logger;
-
     /// <inheritdoc />
-    protected InvestorServiceControllerBase(IMediator mediator, ILogger logger)
+    protected InvestorServiceControllerBase(IMediator mediator)
     {
         Mediator = mediator;
-        _logger = logger;
     }
 
     /// <summary>
     /// Gets current investor id
     /// </summary>
     /// <returns></returns>
-    protected async Task<int> GetCurrentInvestorIdAsync()
-        => await Mediator.Send(new GetInvestorIdByLogin(User.Identity!.Name!));
-
-    /// <summary>
-    /// Logs information level data
-    /// </summary>
-    /// <param name="exception"></param>
-    protected void LogInformation(Exception exception) =>
-        _logger.LogInformation(exception, "{msg}", exception.ToString());
-
+    protected async Task<int> GetCurrentInvestorIdAsync(CancellationToken token)
+        => await Mediator.Send(new GetInvestorIdByLogin(User.Identity!.Name!),token);
 }

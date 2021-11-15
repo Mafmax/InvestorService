@@ -9,16 +9,29 @@ namespace Mafmax.InvestorService.Model.Entities;
 /// </summary>
 public class IndustryEntity
 {
+    /// <summary>
+    /// <inheritdoc cref="IndustryEntity"/>
+    /// </summary>
+    protected IndustryEntity()
+    {
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IndustryEntity"/>
+    /// </summary>
+    public IndustryEntity(string name)
+    {
+        Name = name;
+    }
 
     /// <summary>
     /// Industry identifier
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    public int Id { get; protected set; }
 
     /// <summary>
     /// Industry name
     /// </summary>
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; protected set; } = string.Empty;
 }

@@ -15,6 +15,24 @@ public class InvestmentPortfolioEntity : IHasId<int>
 {
 
     /// <summary>
+    /// <inheritdoc cref="InvestmentPortfolioEntity"/>
+    /// </summary>
+    protected InvestmentPortfolioEntity()
+    {
+        
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="InvestmentPortfolioEntity"/>
+    /// </summary>
+    public InvestmentPortfolioEntity(string name, string targetDescription, List<ExchangeTransactionEntity> transactions)
+    {
+        Name = name;
+        TargetDescription = targetDescription;
+        Transactions = transactions;
+    }
+
+    /// <summary>
     /// Identifier
     /// </summary>
     [Key]
@@ -23,19 +41,29 @@ public class InvestmentPortfolioEntity : IHasId<int>
     /// <summary>
     /// Display name
     /// </summary>
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; protected set; } =string.Empty;
 
     /// <summary>
     /// Description of portfolio goal
     /// </summary>
-    [MinLength(10)]
-    [MaxLength(500)]
-    [Required]
-    public string TargetDescription { get; set; } = string.Empty;
+    public string TargetDescription { get; protected set; } = string.Empty;
 
     /// <summary>
     /// Collection of <inheritdoc cref="ExchangeTransactionEntity"/>
     /// </summary>
     public List<ExchangeTransactionEntity> Transactions { get; set; } = new();
+
+    /// <summary>
+    /// Updates portfolio name
+    /// </summary>
+    /// <param name="newName"></param>
+    public void UpdateName(string newName) => 
+        Name = newName;
+
+    /// <summary>
+    /// Updates portfolio target description
+    /// </summary>
+    /// <param name="newTargetDescription"></param>
+    public void UpdateTargetDescription(string newTargetDescription) => 
+        TargetDescription = newTargetDescription;
 }

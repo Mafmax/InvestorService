@@ -1,8 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Mafmax.InvestorService.Model.Context;
 using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.Assets;
@@ -26,13 +26,6 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     IRequestHandler<GetAssetByIdQuery, AssetDto?>,
     IRequestHandler<GetIssuerAssetsQuery, ShortAssetDto[]>
 {
-    private static void CheckSearchString(FindAssetsQuery query)
-    {
-        if (query.SearchString.Length < query.MinimalSearchStringLength)
-            throw new InvalidOperationException(
-                $"SearchString length must be greater than {query.MinimalSearchStringLength}");
-    }
-
     private IQueryable<AssetEntity> FullAssetWithIncludes => Db.Assets
         .Include(x => x.Stock)
         .Include(x => x.Circulation)
@@ -46,31 +39,23 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// Finds assets
     /// </summary>
     /// <returns>Array of assets found</returns>
-    /// <see cref="InvalidOperationException"/>
-    public async Task<ShortAssetDto[]> Handle(FindAssetsQuery query, CancellationToken token)
-    {
-        CheckSearchString(query);
-        return await Db.Assets
+    public async Task<ShortAssetDto[]> Handle(FindAssetsQuery query, CancellationToken token) =>
+        await Db.Assets
             .Include(x => x.Issuer)
             .Where(AssetEntity.Specs.Search(query.SearchString))
-            .Select(x => Mapper.Map<ShortAssetDto>(x))
+            .ProjectTo<ShortAssetDto>(Mapper.ConfigurationProvider)
             .ToArrayAsync(token);
-    }
 
     /// <summary>
     /// Finds assets
     /// </summary>
     /// <returns>Array of assets found</returns>
-    /// <exception cref="InvalidOperationException"/>
-    public async Task<ShortAssetDto[]> Handle(FindAssetsWithClassQuery query, CancellationToken token)
-    {
-        CheckSearchString(query);
-        return await Db.Assets
+    public async Task<ShortAssetDto[]> Handle(FindAssetsWithClassQuery query, CancellationToken token) =>
+        await Db.Assets
             .Include(x => x.Issuer)
             .Where(AssetEntity.Specs.Search(query.SearchString, query.AssetsClass))
-            .Select(x => Mapper.Map<ShortAssetDto>(x))
+            .ProjectTo<ShortAssetDto>(Mapper.ConfigurationProvider)
             .ToArrayAsync(token);
-    }
 
     /// <summary>
     /// Gets asset
@@ -103,7 +88,7 @@ public class AssetsQueriesHandler : ServiceBase<InvestorDbContext>,
             .Include(x => x.Issuer)
             .Where(AssetEntity.Specs.ByIssuerValidOnly(query.IssuerId))
             .OrderBy(x => x.Circulation.Start)
-            .Select(x => Mapper.Map<ShortAssetDto>(x))
+            .ProjectTo<ShortAssetDto>(Mapper.ConfigurationProvider)
             .ToArrayAsync(token);
 
     }

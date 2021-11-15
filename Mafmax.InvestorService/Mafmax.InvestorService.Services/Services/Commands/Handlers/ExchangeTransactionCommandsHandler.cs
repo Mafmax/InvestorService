@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -22,8 +21,8 @@ namespace Mafmax.InvestorService.Services.Services.Commands.Handlers;
 /// Handle commands associated with transactions
 /// </summary>
 public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>,
-    IRequestHandler<RemoveExchangeTransactionCommand>,
-    IRequestHandler<AddExchangeTransactionCommand, ExchangeTransactionDto>
+    IRequestHandler<DeleteExchangeTransactionCommand>,
+    IRequestHandler<CreateExchangeTransactionCommand, ExchangeTransactionDto>
 
 {
     /// <inheritdoc />
@@ -33,7 +32,7 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
     /// Remove transaction from portfolio
     /// </summary>
     ///<exception cref="EntityNotFoundException"/>
-    public async Task<Unit> Handle(RemoveExchangeTransactionCommand command, CancellationToken token)
+    public async Task<Unit> Handle(DeleteExchangeTransactionCommand command, CancellationToken token)
     {
         var (investorId, portfolioId, transactionId) = command;
 
@@ -76,8 +75,7 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
     /// </summary>
     /// <returns>Created transaction</returns>
     ///<exception cref="EntityNotFoundException"/>
-    ///<exception cref="InvalidOperationException"/>
-    public async Task<ExchangeTransactionDto> Handle(AddExchangeTransactionCommand command, CancellationToken token)
+    public async Task<ExchangeTransactionDto> Handle(CreateExchangeTransactionCommand command, CancellationToken token)
     {
         var asset = await Db.Assets
             .Include(x => x.Stock)
@@ -109,12 +107,6 @@ public class ExchangeTransactionCommandsHandler : ServiceBase<InvestorDbContext>
             if (a is null) ThrowEntityNotFound<AssetEntity>(command.AssetId);
 
             if (ip is null) ThrowEntityNotFound<InvestmentPortfolioEntity>(command.PortfolioId);
-
-            if (command.LotsCount <= 0)
-                throw new InvalidOperationException("LotsCount must be greater than 0");
-
-            if (command.OneLotPrice <= 0)
-                throw new InvalidOperationException("OneLotPrice must be greater than 0");
         }
     }
 

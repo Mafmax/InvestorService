@@ -16,7 +16,7 @@ public static class ThrowsHelper
     /// <exception cref="EntityNotFoundException"></exception>
     [DoesNotReturn]
     public static void ThrowEntityNotFound<TEntity>(object param) =>
-        throw new EntityNotFoundException($"{typeof(TEntity)} with param \"{param}\" not found");
+        throw new EntityNotFoundException($"{typeof(TEntity).Name} with param <{param}> not found");
 
     /// <summary>
     /// Throws <see cref="EntityNotFoundException"/>
@@ -29,6 +29,6 @@ public static class ThrowsHelper
     [DoesNotReturn]
     public static void ThrowIncludedEntityNotFound<TWho, TWhom>(object whoParam, object whomParam)
         => throw new EntityNotFoundException(
-            $"{typeof(TWhom)} with param \"{whomParam}\" " +
-            $"for the {typeof(TWho)} with param \"{whoParam}\" not found");
+            $"{typeof(TWhom).Name} with param <{whomParam}> " +
+            $"for the {typeof(TWho).Name} with param <{whoParam}> not found");
 }

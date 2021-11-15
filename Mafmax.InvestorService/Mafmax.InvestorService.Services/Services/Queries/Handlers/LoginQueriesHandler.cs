@@ -27,12 +27,14 @@ public class LoginQueriesHandler : ServiceBase<InvestorDbContext>,
     /// <returns>True if credentials are valid</returns>
     public async Task<bool> Handle(CheckCredentialsQuery query, CancellationToken token)
     {
+        var (login, password) = query;
+
         var user = await Db.Users
-            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login),token);
+            .FirstOrDefaultAsync(x => x.Login.Equals(login), token);
 
         if (user is null) return false;
 
-        var hash = SHA256.HashData(Encoding.Default.GetBytes(query.Password));
+        var hash = SHA256.HashData(Encoding.Default.GetBytes(password));
 
         return user.PasswordHash.SequenceEqual(hash);
     }
@@ -43,5 +45,5 @@ public class LoginQueriesHandler : ServiceBase<InvestorDbContext>,
     /// <returns>True if login exists</returns>
     public async Task<bool> Handle(CheckLoginExistsQuery query, CancellationToken token) =>
         await Db.Users
-            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login),token) is not null;
+            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login), token) is not null;
 }

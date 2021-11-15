@@ -25,7 +25,7 @@ public static class QueryableExtensions
     /// <param name="idExprMsg">Sets by compiler</param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public async static Task<TValue?> ByIdAsync<TValue, TKey>(this IQueryable<TValue> query, TKey id, CancellationToken token = default, [CallerArgumentExpression("id")] string idExprMsg = null!)
+    public async static Task<TValue?> ByIdAsync<TValue, TKey>(this IQueryable<TValue> query, TKey id, CancellationToken token, [CallerArgumentExpression("id")] string idExprMsg = null!)
         where TValue : IHasId<TKey>
         where TKey : IEquatable<TKey>
     {

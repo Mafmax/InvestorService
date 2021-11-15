@@ -36,7 +36,7 @@ public static class InvestorDbContextSeed
     {
         await context.StockExchanges.AddRangeAsync(new StockExchangeEntity[]
         {
-            new() {Key = "MOEX", Name = "Московская биржа"}
+            new("MOEX", "Московская биржа")
         });
 
         await context.SaveChangesAsync();
@@ -47,8 +47,8 @@ public static class InvestorDbContextSeed
     {
         await context.Countries.AddRangeAsync(new CountryEntity[]
         {
-            new(){Name = "Россия"},
-            new(){Name = "США"},
+            new("Россия"),
+            new("США"),
         });
 
         await context.SaveChangesAsync();
@@ -58,60 +58,59 @@ public static class InvestorDbContextSeed
 
     private async static Task<IndustryEntity[]> SeedIndustriesAsync(InvestorDbContext context)
     {
-        await context.Industries.AddRangeAsync(new IndustryEntity {Name = "Технологии"},
-            new IndustryEntity {Name = "Финансы"}, new IndustryEntity {Name = "Добыча ископаемых"},
-            new IndustryEntity {Name = "Нефть и газ"}, new IndustryEntity {Name = "Телекоммуникации"},
-            new IndustryEntity {Name = "IT"});
+        await context.Industries.AddRangeAsync(new IndustryEntity("Технологии"),
+            new IndustryEntity("Финансы"), new IndustryEntity("Добыча ископаемых"),
+            new IndustryEntity("Нефть и газ"), new IndustryEntity("Телекоммуникации"),
+            new IndustryEntity("IT"));
 
         await context.SaveChangesAsync();
 
         return await context.Industries.ToArrayAsync();
     }
-      
+
     private async static Task<IssuerEntity[]> SeedIssuersAsync(InvestorDbContext context, CountryEntity[] countries, IndustryEntity[] industries)
     {
         await context.Issuers.AddRangeAsync(
-            new IssuerEntity {Country = countries[0], Industry = industries[4], Name = "МТС"},
-            new IssuerEntity {Country = countries[0], Industry = industries[3], Name = "Сургутнефтегаз"},
-            new IssuerEntity {Country = countries[0], Industry = industries[2], Name = "Алроса"},
-            new IssuerEntity {Country = countries[1], Industry = industries[0], Name = "Apple"},
-            new IssuerEntity {Country = countries[0], Industry = industries[5], Name = "Яндекс"},
-            new IssuerEntity {Country = countries[0], Industry = industries[1], Name = "Сбербанк России"});
-          
+            new IssuerEntity(countries[0], industries[4], "МТС"),
+            new IssuerEntity(countries[0], industries[3], "Сургутнефтегаз"),
+            new IssuerEntity(countries[0], industries[2], "Алроса"),
+            new IssuerEntity(countries[1], industries[0], "Apple"),
+            new IssuerEntity(countries[0], industries[5], "Яндекс"),
+            new IssuerEntity(countries[0], industries[1], "Сбербанк России"));
+
         await context.SaveChangesAsync();
-           
+
         return await context.Issuers.ToArrayAsync();
     }
-      
+
     private async static Task<AssetEntity[]> SeedAssetsAsync(InvestorDbContext context, IssuerEntity[] issuers, StockExchangeEntity[] stockExchanges)
     {
         var circulations = new CirculationPeriodEntity[]
         {
-            new() {Start = new DateTime(2016, 7, 16)},
-            new() {Start = new DateTime(2004, 2, 11)},
-            new() {Start = new DateTime(2005, 1, 11)},
-            new() {Start = new DateTime(2011, 11, 29)},
-            new() {Start = new DateTime(2020, 9, 8)},
-            new() {Start = new DateTime(2014, 6, 4)},
-            new() {Start = new DateTime(2007, 7, 20)},
-            new() {Start = new DateTime(2020, 1, 20)},
-            new() {Start = new DateTime(2019, 6, 19)}
+            new(new DateTime(2016, 7, 16)),
+            new(new DateTime(2004, 2, 11)),
+            new(new DateTime(2005, 1, 11)),
+            new(new DateTime(2011, 11, 29)),
+            new(new DateTime(2020, 9, 8)),
+            new(new DateTime(2014, 6, 4)),
+            new(new DateTime(2007, 7, 20)),
+            new(new DateTime(2020, 1, 20)),
+            new(new DateTime(2019, 6, 19))
         };
 
         await context.Assets.AddRangeAsync(
-            new ShareEntity() { Issuer = issuers[5], Ticker = "SBERP", Isin = "RU0009029557", Name = "Сбербанк России, акция привелегированная", IsPreferred = true, LotSize = 10, Currency = "RUB", Stock = stockExchanges[0], Circulation = circulations[0] },
-            new ShareEntity() { Issuer = issuers[0], Ticker = "MTSS", Isin = "RU0007775219", Name = "МТС, акция обыкновенная", IsPreferred = false, LotSize = 10, Currency = "RUB", Stock = stockExchanges[0], Circulation = circulations[1] },
-            new ShareEntity() { Issuer = issuers[1], Ticker = "SNGS", Isin = "RU0008926258", Name = "Сургутнефтегаз, акция обыкновенная", IsPreferred = false, LotSize = 100, Currency = "RUB", Stock = stockExchanges[0], Circulation = circulations[2] },
-            new ShareEntity() { Issuer = issuers[2], Ticker = "ALRS", Isin = "RU0007252813", Name = "Алроса, акция обыкновенная", IsPreferred = false, LotSize = 10, Currency = "RUB", Stock = stockExchanges[0], Circulation = circulations[3] },
-            new ShareEntity() { Issuer = issuers[3], Ticker = "AAPL-RM", Isin = "US0378331005", Name = "Apple, акция обыкновенная", IsPreferred = false, LotSize = 1, Currency = "USD", Stock = stockExchanges[0], Circulation = circulations[4] },
-            new ShareEntity() { Issuer = issuers[4], Ticker = "YNDX", Isin = "NL0009805522", Name = "ЯНДЕКС Н.В., акция обыкновенная", IsPreferred = false, LotSize = 1, Currency = "EUR", Stock = stockExchanges[0], Circulation = circulations[5] },
-            new ShareEntity() { Issuer = issuers[5], Ticker = "SBER", Isin = "RU0009029540", Name = "Сбербанк России, акция обыкновенная", IsPreferred = false, LotSize = 10, Currency = "RUB", Stock = stockExchanges[0], Circulation = circulations[6] },
-            new BondEntity() { Issuer = issuers[5], Ticker = "RU000A101C89", Isin = "RU000A101C89", Name = "Сбербанк ПАО 001Р-SBER15", LotSize = 1, Currency = "RUB", Stock = stockExchanges[0], Type = BondType.Corporate, Circulation = circulations[7] },
-            new BondEntity() { Issuer = issuers[5], Ticker = "RU000A1013J4", Isin = "RU000A1013J4", Name = "СберИОС 001Р-177R GMKN 100", LotSize = 1, Currency = "RUB", Stock = stockExchanges[0], Type = BondType.Corporate, Circulation = circulations[8] }
-        );
-           
+            new ShareEntity("Сбербанк России, акция привелегированная", circulations[0], "RUB", "RU0009029557", issuers[5], 10, stockExchanges[0], "SBERP", true),
+            new ShareEntity("МТС, акция обыкновенная", circulations[1], "RUB", "RU0007775219", issuers[0], 10, stockExchanges[0], "MTSS", false),
+            new ShareEntity("Сургутнефтегаз, акция обыкновенная", circulations[2], "RUB", "RU0008926258", issuers[1], 100, stockExchanges[0], "SNGS", false),
+            new ShareEntity("Алроса, акция обыкновенная", circulations[3], "RUB", "RU0007252813", issuers[2], 10, stockExchanges[0], "ALRS", false),
+            new ShareEntity("Apple, акция обыкновенная", circulations[4], "USD", "US0378331005", issuers[3], 1, stockExchanges[0], "AAPL-RM", false),
+            new ShareEntity("ЯНДЕКС Н.В., акция обыкновенная", circulations[5], "EUR", "NL0009805522", issuers[4], 1, stockExchanges[0], "YNDX", false),
+            new ShareEntity("Сбербанк России, акция обыкновенная", circulations[6], "RUB", "RU0009029540", issuers[5], 10, stockExchanges[0], "SBER", false),
+            new BondEntity("Сбербанк ПАО 001Р-SBER15", circulations[7], "RUB", "RU000A101C89", issuers[5], 1, stockExchanges[0], "RU000A101C89", BondType.Corporate),
+            new BondEntity("СберИОС 001Р-177R GMKN 100", circulations[8], "RUB", "RU000A1013J4", issuers[5], 1, stockExchanges[0], "RU000A1013J4", BondType.Corporate));
+
         await context.SaveChangesAsync();
-         
+
         return await context.Assets.ToArrayAsync();
     }
 }

@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
-using Mafmax.InvestorService.Services.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -21,7 +19,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class ExchangeTransactionsController : InvestorServiceControllerBase
 {
     ///<inheritdoc/>
-    public ExchangeTransactionsController(IMediator mediator, ILogger<ExchangeTransactionsController> logger) : base(mediator, logger)
+    public ExchangeTransactionsController(IMediator mediator) : base(mediator)
     {
     }
 
@@ -42,24 +40,9 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
     public async Task<ActionResult<ExchangeTransactionDto>> AddTransactionIntoPortfolio(
         [FromQuery] AddExchangeTransactionCommandRequestDto commandDto, CancellationToken token)
     {
-        Response.StatusCode = StatusCodes.Status201Created;
+        var id = await GetCurrentInvestorIdAsync(token);
 
-        try
-        {
-            var id = await GetCurrentInvestorIdAsync();
-
-            return await Mediator.Send(commandDto.GetCommand(id), token);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            LogInformation(ex);
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogInformation(ex);
-            return BadRequest(ex.Message);
-        }
+        return await Mediator.Send(commandDto.GetCommand(id), token);
     }
 
     /// <summary>
@@ -79,16 +62,10 @@ public class ExchangeTransactionsController : InvestorServiceControllerBase
     public async Task<IActionResult> RemoveTransactionFromPortfolio(
         [FromQuery] RemoveExchangeTransactionCommandRequestDto command, CancellationToken token)
     {
-        try
-        {
-            var id = await GetCurrentInvestorIdAsync();
+            var id = await GetCurrentInvestorIdAsync(token);
+
             await Mediator.Send(command.GetCommand(id), token);
+
             return Ok();
-        }
-        catch (EntityNotFoundException ex)
-        {
-            LogInformation(ex);
-            return NotFound(ex.Message);
-        }
     }
 }

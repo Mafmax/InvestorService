@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
 using Mafmax.InvestorService.Services.Services.Queries.Issuers;
 using MediatR;
@@ -20,7 +19,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class IssuersController : InvestorServiceControllerBase
 {
     /// <inheritdoc />
-    public IssuersController(IMediator mediator, ILogger<IssuersController> logger) : base(mediator, logger)
+    public IssuersController(IMediator mediator) : base(mediator)
     {
     }
 
@@ -43,16 +42,6 @@ public class IssuersController : InvestorServiceControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("assets/{issuerId}")]
-    public async Task<ActionResult<ShortAssetDto[]>> GetAssets([FromQuery] GetIssuerAssetsQuery query, CancellationToken token)
-    {
-        try
-        {
-            return await Mediator.Send(query, token);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            LogInformation(ex);
-            return NotFound();
-        }
-    }
+    public async Task<ActionResult<ShortAssetDto[]>> GetAssets([FromQuery] GetIssuerAssetsQuery query, CancellationToken token) => 
+        await Mediator.Send(query, token);
 }

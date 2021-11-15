@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,7 +22,7 @@ namespace Mafmax.InvestorService.Services.Services.Commands.Handlers;
 public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
     IRequestHandler<CreatePortfolioCommand, PortfolioDetailedInfoDto>,
     IRequestHandler<DeletePortfolioCommand>,
-    IRequestHandler<ChangePortfolioCommand, PortfolioDetailedInfoDto>
+    IRequestHandler<UpdatePortfolioCommand, PortfolioDetailedInfoDto>
 {
     /// <inheritdoc />
     public PortfolioCommandsHandler(InvestorDbContext db, IMapper mapper) : base(db, mapper) { }
@@ -44,9 +43,6 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
 
         var newPortfolio = Mapper.Map<InvestmentPortfolioEntity>(command);
 
-        if (!Validator.TryValidateObject(newPortfolio, new(newPortfolio), null, true))
-            throw new InvalidOperationException("Model is wrong");
-
         investor.Portfolios.Add(newPortfolio);
 
         await Db.SaveChangesAsync(token);
@@ -63,7 +59,8 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
 
             if (i is null)
                 ThrowEntityNotFound<InvestorEntity>(command.InvestorId);
-            else if (i.Portfolios.Count >= command.PortfoliosCountLimit)
+
+            if (i.Portfolios.Count >= command.PortfoliosCountLimit)
                 throw new InvalidOperationException($"Limit of portfolios ({command.PortfoliosCountLimit}) has been reached");
         }
     }
@@ -107,8 +104,7 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
     /// Changes portfolio parameters, which not null
     /// </summary>
     /// <exception cref="EntityNotFoundException"/>
-    /// <exception cref="DbUpdateException">If model incorrect</exception>
-    public async Task<PortfolioDetailedInfoDto> Handle(ChangePortfolioCommand command, CancellationToken token)
+    public async Task<PortfolioDetailedInfoDto> Handle(UpdatePortfolioCommand command, CancellationToken token)
     {
         var investor = await Db.Investors
             .Include(x => x.Portfolios)
@@ -119,13 +115,10 @@ public class PortfolioCommandsHandler : ServiceBase<InvestorDbContext>,
         Validate(investor, portfolio);
 
         if (command.NewName is not null)
-            portfolio.Name = command.NewName;
-
+            portfolio.UpdateName(command.NewName);
+        
         if (command.NewTargetDescription is not null)
-            portfolio.TargetDescription = command.NewTargetDescription;
-
-        if (!Validator.TryValidateObject(portfolio, new(portfolio), null, true))
-            throw new InvalidOperationException("Model is wrong");
+            portfolio.UpdateTargetDescription(command.NewTargetDescription);
 
         await Db.SaveChangesAsync(token);
 

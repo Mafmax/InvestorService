@@ -12,18 +12,40 @@ namespace Mafmax.InvestorService.Model.Entities;
 [Owned]
 public class CirculationPeriodEntity
 {
+    /// <summary>
+    /// <inheritdoc cref="CirculationPeriodEntity"/>
+    /// </summary>
+    protected CirculationPeriodEntity()
+    {
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="CirculationPeriodEntity"/>
+    /// </summary>
+    public CirculationPeriodEntity(DateTime start)
+    {
+        Start = start;
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="CirculationPeriodEntity"/>
+    /// </summary>
+    public CirculationPeriodEntity(DateTime start, DateTime? end) : this()
+    {
+        Start = start;
+        End = end;
+    }
 
     /// <summary>
     /// Start date of circulation
     /// </summary>
     [Column("StartCirculation")]
-    [Required]
-    public DateTime Start { get; set; }
+    public DateTime Start { get; protected set; }
 
     /// <summary>
     /// End date of circulation
     /// </summary>
     [Column("EndCirculation")]
-    public DateTime? End { get; set; }
+    public DateTime? End { get; protected set; }
 
 }

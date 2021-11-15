@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
-using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 using Mafmax.InvestorService.Services.Services.Queries.Portfolios;
 using MediatR;
@@ -25,7 +23,7 @@ public class PortfoliosController : InvestorServiceControllerBase
 {
     private const int PortfoliosCountLimit = 3;
     /// <inheritdoc />
-    public PortfoliosController(IMediator mediator, ILogger<PortfoliosController> logger) : base(mediator, logger)
+    public PortfoliosController(IMediator mediator) : base(mediator)
     {
     }
 
@@ -44,19 +42,9 @@ public class PortfoliosController : InvestorServiceControllerBase
     public async Task<ActionResult<PortfolioDetailedInfoDto>> Create(
         [FromQuery] CreatePortfolioCommandRequestDto commandDto, CancellationToken token)
     {
-        Response.StatusCode = StatusCodes.Status201Created;
+        var id = await GetCurrentInvestorIdAsync(token);
 
-        try
-        {
-            var id = await GetCurrentInvestorIdAsync();
-
-            return await Mediator.Send(commandDto.GetCommand(id, PortfoliosCountLimit), token);
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogInformation(ex);
-            return BadRequest(ex.Message);
-        }
+        return await Mediator.Send(commandDto.GetCommand(id, PortfoliosCountLimit), token);
     }
 
     /// <summary>
@@ -76,23 +64,10 @@ public class PortfoliosController : InvestorServiceControllerBase
     public async Task<IActionResult> Delete(
         [FromQuery] DeletePortfolioCommandRequestDto commandDto, CancellationToken token)
     {
-        try
-        {
-            var id = await GetCurrentInvestorIdAsync();
+        var id = await GetCurrentInvestorIdAsync(token);
 
-            await Mediator.Send(commandDto.GetCommand(id), token);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            LogInformation(ex);
-            return NotFound(ex.Message);
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogInformation(ex);
-            return BadRequest(ex.Message);
-        }
-
+        await Mediator.Send(commandDto.GetCommand(id), token);
+        
         return Ok();
     }
 
@@ -111,23 +86,8 @@ public class PortfoliosController : InvestorServiceControllerBase
     [Authorize]
     [HttpPut("edit")]
     public async Task<ActionResult<PortfolioDetailedInfoDto>> Edit(
-        [FromQuery] ChangePortfolioCommand command, CancellationToken token)
-    {
-        try
-        {
-            return await Mediator.Send(command, token);
-        }
-        catch (InvalidOperationException ex)
-        {
-            LogInformation(ex);
-            return BadRequest(ex.Message);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            LogInformation(ex);
-            return NotFound(ex.Message);
-        }
-    }
+        [FromQuery] UpdatePortfolioCommand command, CancellationToken token) =>
+        await Mediator.Send(command, token);
 
     /// <summary>
     /// Gets short portfolios info for the investor
@@ -142,18 +102,8 @@ public class PortfoliosController : InvestorServiceControllerBase
     [Authorize]
     [HttpGet("investor")]
     public async Task<ActionResult<PortfolioShortInfoDto[]>> GetShortInvestorPortfolioInfo(
-        [FromQuery] GetAllPortfoliosQuery query, CancellationToken token)
-    {
-        try
-        {
-            return await Mediator.Send(query, token);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            LogInformation(ex);
-            return NotFound(ex.Message);
-        }
-    }
+        [FromQuery] GetAllPortfoliosQuery query, CancellationToken token) =>
+        await Mediator.Send(query, token);
 
     /// <summary>
     /// Gets detailed portfolio info
@@ -170,15 +120,8 @@ public class PortfoliosController : InvestorServiceControllerBase
     public async Task<ActionResult<PortfolioDetailedInfoDto>> GetDetailedPortfolioInfo(
         [FromQuery] GetDetailedPortfolioQueryRequestDto queryDto, CancellationToken token)
     {
-        try
-        {
-            var id = await GetCurrentInvestorIdAsync();
-
+            var id = await GetCurrentInvestorIdAsync(token);
+     
             return await Mediator.Send(queryDto.GetQuery(id), token);
-        }
-        catch (EntityNotFoundException ex)
-        {
-            return NotFound(ex.Message);
-        }
     }
 }

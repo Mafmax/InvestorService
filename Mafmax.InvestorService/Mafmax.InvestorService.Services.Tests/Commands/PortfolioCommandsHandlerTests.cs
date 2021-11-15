@@ -14,28 +14,10 @@ public class PortfolioCommandsHandlerTests : InvestorServiceCommandsHandlerTests
     protected override PortfolioCommandsHandler GetHandler(Guid token) =>
         new(GetDb(token), Mapper);
 
-    [Theory]
-    [InlineData(null, "Some target description")]
-    [InlineData("", "Some target description")]
-    [InlineData("Name", "Short")]
-    [InlineData("Name", "Too long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long")]
-    [InlineData("Name", "")]
-    [InlineData("Name", null)]
-    public async Task CreatePortfolio_ShouldThrowsIfIncorrectData(string name, string target)
-    {
-        //Arrange
-        CreatePortfolioCommand command = new(2, name, target);
-
-        //Act
-
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Execute(command));
-    }
-
+   
     [Theory]
     [InlineData(1, 3)]
     [InlineData(2, 1)]
-    [InlineData(3, 0)]
     public async Task CreatePortfolio_ShouldThrow_IfLimitReached(int investorId, int limit)
     {
         //Arrange
@@ -84,7 +66,7 @@ public class PortfolioCommandsHandlerTests : InvestorServiceCommandsHandlerTests
         await using (var db = GetDb(token))
             startCount = await db.InvestmentPortfolios.CountAsync();
 
-        ChangePortfolioCommand command = new(2, 4,
+        UpdatePortfolioCommand command = new(2, 4,
             "Some name", "Some target description");
 
         //Act
@@ -95,22 +77,6 @@ public class PortfolioCommandsHandlerTests : InvestorServiceCommandsHandlerTests
 
         //Assert
         Assert.Equal(expected: 0, actualDifference);
-    }
-
-    [Theory]
-    [InlineData("", "Some target description")]
-    [InlineData("Name", "Short")]
-    [InlineData("Name", "Too long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long-long")]
-    [InlineData("Name", "")]
-    public async Task ChangePortfolio_ShouldThrowsIfIncorrectData(string name, string target)
-    {
-        //Arrange
-        ChangePortfolioCommand command = new(2, 4, name, target);
-
-        //Act
-
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Execute(command));
     }
 
     [Fact]

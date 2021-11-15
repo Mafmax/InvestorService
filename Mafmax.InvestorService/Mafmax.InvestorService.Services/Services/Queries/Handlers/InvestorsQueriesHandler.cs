@@ -23,10 +23,10 @@ public class InvestorsQueriesHandler : ServiceBase<InvestorDbContext>,
     /// Get investor id by login
     /// </summary>
     /// <returns>Investor id</returns>
-    public async Task<int> Handle(GetInvestorIdByLogin query,CancellationToken token)
+    public async Task<int> Handle(GetInvestorIdByLogin query, CancellationToken token)
     {
         var investor = await Db.Investors
-            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login),token);
+            .FirstOrDefaultAsync(x => x.Login.Equals(query.Login), token);
 
         if (investor is null) ThrowEntityNotFound<InvestorEntity>(query.Login);
 

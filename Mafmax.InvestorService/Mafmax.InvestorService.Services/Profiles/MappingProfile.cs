@@ -48,7 +48,7 @@ public class MappingProfile : Profile
 
         CreateMap<CreatePortfolioCommand, InvestmentPortfolioEntity>();
 
-        CreateMap<AddExchangeTransactionCommand, ExchangeTransactionEntity>()
+        CreateMap<CreateExchangeTransactionCommand, ExchangeTransactionEntity>()
             .ForMember(dest => dest.Type,
                 opt => opt.MapFrom(src => src.OrderToBuy ? ExchangeTransactionType.Buy : ExchangeTransactionType.Sell));
 

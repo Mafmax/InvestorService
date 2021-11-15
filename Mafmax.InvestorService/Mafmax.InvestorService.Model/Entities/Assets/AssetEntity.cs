@@ -59,52 +59,48 @@ public abstract class AssetEntity : IHasId<int>
     /// Unique key for asset
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    public int Id { get; protected set; }
 
     /// <summary>
     /// Alphabetic asset identifier
     /// </summary>
-    [Required]
-    public string Ticker { get; set; } = string.Empty;
+    public string Ticker { get; protected set; } = string.Empty;
 
     /// <summary>
     /// International Securities Identification Number
     /// </summary>
-    [Required]
-    public string Isin { get; set; } = string.Empty;
+    public string Isin { get; protected set; } = string.Empty;
 
     /// <summary>
     /// Asset name
     /// </summary>
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; protected set; } = string.Empty;
 
     /// <summary>
     /// Assets issuer company
     /// </summary>
-    public IssuerEntity Issuer { get; set; } = null!;
+    public IssuerEntity Issuer { get; protected set; } = null!;
 
     /// <summary>
     /// Stock exchange organization
     /// </summary>
-    public StockExchangeEntity Stock { get; set; } = null!;
+    public StockExchangeEntity Stock { get; protected set; } = null!;
 
     /// <summary>
     /// Period of assets circulation
     /// </summary>
-    public CirculationPeriodEntity Circulation { get; set; } = null!;
+    public CirculationPeriodEntity Circulation { get; protected set; } = null!;
 
     /// <summary>
     /// Currency name e.g. USD, RUB
     /// </summary>
     [Column("BaseCurrency")]
-    public string Currency { get; set; } = string.Empty;
+    public string Currency { get; protected set; } = string.Empty;
 
     /// <summary>
     /// Number of assets in one lot 
     /// </summary>
-    [Required]
-    public int LotSize { get; set; }
+    public int LotSize { get; protected set; }
 
     /// <summary>
     /// Asset class e.g. share or bond

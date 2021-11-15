@@ -23,7 +23,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
         int investorId, int portfolioId, int transactionId)
     {
         //Arrange
-        RemoveExchangeTransactionCommand command = new(investorId, portfolioId, transactionId);
+        DeleteExchangeTransactionCommand command = new(investorId, portfolioId, transactionId);
 
         //Act
 
@@ -40,7 +40,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
         int actualDifference;
         await using (var db = GetDb(token))
             startCount = db.ExchangeTransactions.Count();
-        RemoveExchangeTransactionCommand command = new(1, 1, 1);
+        DeleteExchangeTransactionCommand command = new(1, 1, 1);
 
         //Act
         await GetHandler(token).Handle(command,default);
@@ -49,23 +49,6 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
 
         //Assert
         Assert.Equal(expected: 1, actualDifference);
-    }
-
-    [Theory]
-    [InlineData(-5, 1)]
-    [InlineData(0, 1)]
-    [InlineData(1, 0)]
-    [InlineData(1, -1)]
-    public async Task AddExchangeTransaction_ShouldThrows_IfDataIncorrect(decimal price, int lotsCount)
-    {
-        //Arrange
-        AddExchangeTransactionCommand command =
-            new(1, 1, 1, true, price, lotsCount);
-
-        //Act
-
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await Execute(command));
     }
 
     [Fact]
@@ -79,7 +62,7 @@ public class ExchangeTransactionsCommandsHandlerTests : InvestorServiceCommandsH
         await using (var db = GetDb(token))
             startCount =await db.ExchangeTransactions.CountAsync();
             
-        AddExchangeTransactionCommand command =
+        CreateExchangeTransactionCommand command =
             new(1, 1, 1, true, 100, 50);
 
         //Act

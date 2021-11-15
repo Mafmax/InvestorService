@@ -19,10 +19,10 @@ public class LoginQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBase<Lo
     }
 
     [Theory]
-    [InlineData("Investor1","1234",false)]
-    [InlineData("Investor1","12345",true)]
-    [InlineData("Investor2","12345",true)]
-    [InlineData("Investor4","12345",false)]
+    [InlineData("Investor1","1234aA",false)]
+    [InlineData("Investor1", "qpeQPE772", true)]
+    [InlineData("Investor2", "56772oOoO", true)]
+    [InlineData("Investor4", "1234aA", false)]
     public async Task CheckCredentials_ShouldReturnsTrue_IfDataCorrect(string login, string password,bool expected)
     {
         //Arrange

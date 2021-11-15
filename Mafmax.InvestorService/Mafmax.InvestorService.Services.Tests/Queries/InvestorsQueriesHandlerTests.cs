@@ -20,7 +20,7 @@ public class InvestorsQueriesHandlerTests :InvestorServiceQueriesHandlerTestsBas
     }
 
     [Theory]
-    [InlineData("Investor")]
+    [InlineData("Investor5")]
     [InlineData("Investor4")]
     public async Task GetInvestorIdByLogin_ShouldThrows_IfInvestorNotFound(string login)
     {

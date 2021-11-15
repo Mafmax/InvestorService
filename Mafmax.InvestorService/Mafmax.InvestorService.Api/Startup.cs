@@ -1,4 +1,5 @@
 using System.Reflection;
+using Mafmax.InvestorService.Api.Middleware;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -48,8 +49,9 @@ public class Startup
 
         services.AddAutoMapper();
 
-        services
-            .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        services.AddTransient<ExceptionHandlingMiddleware>();
+
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
             .AddCookie(opt =>
             {
                 opt.LoginPath = new PathString("/api/login/error");
@@ -57,6 +59,8 @@ public class Startup
             });
 
         services.AddControllers();
+
+        services.ConfigureValidation();
 
         services.AddSwaggerGen(c =>
         {
@@ -84,10 +88,10 @@ public class Startup
         app.UseRouting();
 
         app.UseAuthentication();
-
+        
         app.UseAuthorization();
 
-        app.UseAuthorization();
+        app.UseMiddleware<ExceptionHandlingMiddleware>();
 
         app.UseEndpoints(endpoints =>
         {

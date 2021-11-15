@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Mafmax.InvestorService.Services.Exceptions;
 using Mafmax.InvestorService.Services.Services.Queries.Assets;
 using Mafmax.InvestorService.Services.Services.Queries.Handlers;
@@ -35,9 +34,9 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
     }
 
     [Theory]
-    [InlineData("ISIN2")]
-    [InlineData("ISIN5")]
-    [InlineData("ISIN7")]
+    [InlineData("US9872349871")]
+    [InlineData("RU0AS235JS29")]
+    [InlineData("RU6403729562")]
     public async Task GetAssetByIsin_ShouldReturnsAssetWithSameIsin(string isin)
     {
         //Arrange
@@ -66,29 +65,14 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
     public async Task GetAssetByIsin_ShouldThrows_IfNotFound()
     {
         //Arrange
-        GetAssetByIsinQuery query = new("NotExistsIsin");
+        GetAssetByIsinQuery query = new("AA1234567890");
 
         //Act
 
         //Assert
         await Assert.ThrowsAsync<EntityNotFoundException>(async () => await AskAsync(query));
     }
-
-    [Theory]
-    [InlineData("aa", 3)]
-    [InlineData("aa", 10)]
-    public async Task FindAssets_ShouldThrows_IfIncorrectData(string searchString, int minLength)
-    {
-        //Arrange
-        FindAssetsQuery query = new(searchString, minLength);
-
-        //Act
-
-        //Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(async () => await AskAsync(query));
-
-    }
-
+    
     [Theory]
     [InlineData("Sber", "Акция")]
     [InlineData("Share1", "Облигация")]
@@ -123,7 +107,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
 
     [Theory]
     [InlineData("Share")]
-    [InlineData("ISIN")]
+    [InlineData("RU0")]
     [InlineData("Ticker")]
     public async Task FindAssets_ShouldReturnsResult_IfSearchStringIsPartOfIsinOrNameOrTicker(string searchString)
     {
@@ -139,7 +123,7 @@ public class AssetsQueriesHandlerTests : InvestorServiceQueriesHandlerTestsBase<
 
     [Theory]
     [InlineData("Share")]
-    [InlineData("ISIN")]
+    [InlineData("RU0")]
     [InlineData("Ticker")]
     public async Task FindAssetsWithClass_ShouldReturnsResult_IfSearchStringIsPartOfIsinOrNameOrTicker(string searchString)
     {

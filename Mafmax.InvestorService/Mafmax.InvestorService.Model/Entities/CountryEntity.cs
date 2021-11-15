@@ -9,16 +9,29 @@ namespace Mafmax.InvestorService.Model.Entities;
 /// </summary>
 public class CountryEntity
 {
+    /// <summary>
+    /// <inheritdoc cref="CountryEntity"/>
+    /// </summary>
+    protected CountryEntity()
+    {
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="CountryEntity"/>
+    /// </summary>
+    public CountryEntity(string name)
+    {
+        Name = name;
+    }
 
     /// <summary>
     /// Identifier
     /// </summary>
     [Key]
-    public int Id { get; set; } 
+    public int Id { get; protected set; } 
 
     /// <summary>
     /// Country name
     /// </summary>
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; protected set; } = string.Empty;
 }

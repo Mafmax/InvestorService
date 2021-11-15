@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using FluentValidation.AspNetCore;
 using Mafmax.InvestorService.Model.Context;
+using Mafmax.InvestorService.Services.Validation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +27,9 @@ public static class ServiceCollectionExtensions
 
         services.AddDbContext<InvestorDbContext>(opt =>
             opt.UseSqlServer(connectionString, x =>
-                x.MigrationsAssembly(migrationAssemblyName)));
+            {
+                x.MigrationsAssembly(migrationAssemblyName);
+            }));
     }
 
     /// <summary>
@@ -39,6 +43,19 @@ public static class ServiceCollectionExtensions
     /// </summary>
     public static void AddRequestHandlers(this IServiceCollection services) => 
         services.AddRequestHandlers(typeof(IRequestHandler<,>),Assembly.GetExecutingAssembly());
+
+    /// <summary>
+    /// Injects validators into container
+    /// </summary>
+    public static void ConfigureValidation(this IServiceCollection services)
+    {
+        services.AddFluentValidation(fv =>
+        {
+            fv.RegisterValidatorsFromAssembly(Assembly.GetExecutingAssembly(), includeInternalTypes: true);
+        });
+
+        services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    }
 
     private static void AddRequestHandlers(this IServiceCollection services, Type type,Assembly assembly)
     {

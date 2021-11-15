@@ -22,7 +22,7 @@ namespace Mafmax.InvestorService.Api.Controllers;
 public class AccountController : InvestorServiceControllerBase
 {
     /// <inheritdoc />
-    public AccountController(IMediator mediator, ILogger<AccountController> logger) : base(mediator, logger)
+    public AccountController(IMediator mediator, ILogger<AccountController> logger) : base(null)
     {
     }
 

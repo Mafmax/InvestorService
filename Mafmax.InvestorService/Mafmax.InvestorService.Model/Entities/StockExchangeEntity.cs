@@ -10,22 +10,35 @@ namespace Mafmax.InvestorService.Model.Entities;
 /// </summary>
 public class StockExchangeEntity
 {
+    /// <summary>
+    /// <inheritdoc cref="StockExchangeEntity"/>
+    /// </summary>
+    public StockExchangeEntity()
+    {
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="StockExchangeEntity"/>
+    /// </summary>
+    public StockExchangeEntity(string key, string name)
+    {
+        Key = key;
+        Name = name;
+    }
 
     /// <summary>
     /// Identifier
     /// </summary>
     [Key]
-    public int Id { get; set; }
+    public int Id { get; protected set; }
 
     /// <summary>
     /// Stock exchange key e.g. MOEX
     /// </summary>
-    [Required]
-    public string Key { get; set; } = string.Empty;
+    public string Key { get; protected set; } = string.Empty;
 
     /// <summary>
     /// Stock exchange name
     /// </summary>
-    [Required]
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; protected set; } = string.Empty;
 }
