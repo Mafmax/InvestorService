@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
-using Mafmax.InvestorService.Services.Services.Commands.Login;
-using Mafmax.InvestorService.Services.Services.Queries.Login;
+using Mafmax.InvestorService.Services.Commands.Login;
+using Mafmax.InvestorService.Services.Queries.Login;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

@@ -1,4 +1,4 @@
-﻿using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
+﻿using Mafmax.InvestorService.Services.Commands.Portfolios;
 
 namespace Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 

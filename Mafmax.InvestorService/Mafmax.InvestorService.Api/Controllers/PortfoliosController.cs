@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
+using Mafmax.InvestorService.Services.Commands.Portfolios;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
-using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
-using Mafmax.InvestorService.Services.Services.Queries.Portfolios;
+using Mafmax.InvestorService.Services.Queries.Portfolios;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Mafmax.InvestorService.Services.Services.Queries.Handlers;
-using Mafmax.InvestorService.Services.Services.Queries.Issuers;
+using Mafmax.InvestorService.Services.Queries.Handlers;
+using Mafmax.InvestorService.Services.Queries.Issuers;
 using Mafmax.InvestorService.Services.Tests.Queries.Base;
 using Xunit;
 using static Mafmax.InvestorService.Services.MockData.Context.MockProvider;

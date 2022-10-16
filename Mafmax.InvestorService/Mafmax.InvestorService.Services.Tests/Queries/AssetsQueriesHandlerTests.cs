@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Queries.Assets;
-using Mafmax.InvestorService.Services.Services.Queries.Handlers;
+using Mafmax.InvestorService.Services.Queries.Assets;
+using Mafmax.InvestorService.Services.Queries.Handlers;
 using Mafmax.InvestorService.Services.Tests.Queries.Base;
 using Xunit;
 using static Mafmax.InvestorService.Services.MockData.Context.MockProvider;

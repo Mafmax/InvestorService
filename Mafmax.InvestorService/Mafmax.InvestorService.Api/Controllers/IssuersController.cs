@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Services.Queries.Assets;
-using Mafmax.InvestorService.Services.Services.Queries.Issuers;
+using Mafmax.InvestorService.Services.Queries.Assets;
+using Mafmax.InvestorService.Services.Queries.Issuers;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

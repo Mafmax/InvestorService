@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Mafmax.InvestorService.Api.Controllers.Base;
 using Mafmax.InvestorService.Services.DTOs;
 using Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
-using Mafmax.InvestorService.Services.Services.Queries.Assets;
+using Mafmax.InvestorService.Services.Queries.Assets;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 
