@@ -1,4 +1,4 @@
-﻿using Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
+﻿using Mafmax.InvestorService.Services.Commands.ExchangeTransactions;
 
 namespace Mafmax.InvestorService.Services.DTOs.RequestDTOs.Commands;
 

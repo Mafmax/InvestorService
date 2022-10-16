@@ -5,10 +5,10 @@ using Mafmax.InvestorService.Model.Entities;
 using Mafmax.InvestorService.Model.Entities.Assets;
 using Mafmax.InvestorService.Model.Entities.ExchangeTransaction;
 using Mafmax.InvestorService.Model.Entities.Users;
+using Mafmax.InvestorService.Services.Commands.ExchangeTransactions;
+using Mafmax.InvestorService.Services.Commands.Login;
+using Mafmax.InvestorService.Services.Commands.Portfolios;
 using Mafmax.InvestorService.Services.DTOs;
-using Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
-using Mafmax.InvestorService.Services.Services.Commands.Login;
-using Mafmax.InvestorService.Services.Services.Commands.Portfolios;
 
 namespace Mafmax.InvestorService.Services.Profiles;
 

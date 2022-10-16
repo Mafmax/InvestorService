@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Mafmax.InvestorService.Services.Services.Queries.Investors;
+using Mafmax.InvestorService.Services.Queries.Investors;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

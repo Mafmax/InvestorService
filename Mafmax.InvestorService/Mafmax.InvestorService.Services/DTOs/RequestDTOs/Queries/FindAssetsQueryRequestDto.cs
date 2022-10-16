@@ -1,4 +1,4 @@
-﻿using Mafmax.InvestorService.Services.Services.Queries.Assets;
+﻿using Mafmax.InvestorService.Services.Queries.Assets;
 
 namespace Mafmax.InvestorService.Services.DTOs.RequestDTOs.Queries;
 

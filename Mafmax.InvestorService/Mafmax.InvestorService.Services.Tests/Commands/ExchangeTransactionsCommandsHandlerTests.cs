@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Mafmax.InvestorService.Services.Commands.ExchangeTransactions;
+using Mafmax.InvestorService.Services.Commands.Handlers;
 using Mafmax.InvestorService.Services.Exceptions;
-using Mafmax.InvestorService.Services.Services.Commands.ExchangeTransactions;
-using Mafmax.InvestorService.Services.Services.Commands.Handlers;
 using Mafmax.InvestorService.Services.Tests.Commands.Base;
 using Microsoft.EntityFrameworkCore;
 using Xunit;

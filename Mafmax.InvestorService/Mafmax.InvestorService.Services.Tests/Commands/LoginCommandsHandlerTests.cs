@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Mafmax.InvestorService.Services.Services.Commands.Handlers;
-using Mafmax.InvestorService.Services.Services.Commands.Login;
+using Mafmax.InvestorService.Services.Commands.Handlers;
+using Mafmax.InvestorService.Services.Commands.Login;
 using Mafmax.InvestorService.Services.Tests.Commands.Base;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
